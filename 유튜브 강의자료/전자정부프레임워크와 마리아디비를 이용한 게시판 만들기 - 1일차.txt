@@ -36,6 +36,18 @@
 
 2. 프로젝트 생성
 
+====================
+
+** Maven 프로젝트이기 때문에 pox.xml이 생성이 된다.
+** java폴더는 java소스가 들어간다.
+​** resources폴더는 각종 설정, 서버 설정, 디비 설정, 쿼리가 들어감.
+** webapp폴더는 jsp가 들어가는 폴더
+
+** resources > db에 있는 sampledb.sql은 메모리 db로 WAS서버가 올라갈때 자동적으로 테이블생성과 테이터 입력이 되게 된다.
+   그래서 서버 껐다 키면 초기화가 된다.
+
+====================
+
 - 이클립스 실행
 
 - 메뉴 > eGovFrame > Start > New Web Project 클릭(메뉴가 안보이면 Window > Open Perspective 에서 eGovFrame 선택)
@@ -48,16 +60,24 @@
 
 - 잠시 후 프로젝트가 생성되며 샘플코드가 자동으로 만들어 집니다.
 
-** Maven 프로젝트이기 때문에 pox.xml이 생성이 된다.
-** java폴더는 java소스가 들어간다.
-​** resources폴더는 각종 설정, 서버 설정, 디비 설정, 쿼리가 들어감.
-** webapp폴더는 jsp가 들어가는 폴더
 
-** resources > db에 있는 sampledb.sql은 메모리 db로 WAS서버가 올라갈때 자동적으로 테이블생성과 테이터 입력이 되게 된다.
-   그래서 서버 껐다 키면 초기화가 된다.
 
 
 3. 프로젝트 실행
+
+====================
+
+** 처음에 화면띄우게 되면 webapp의 index.jsp가 실행된다. 그러면 egovSampleList.do가 호출된다.
+   > 그럼 컨트롤러를 타게 되고   (egovframework.example.sample.web)
+   > 서비스를 타고   (egovframework.example.sample.service)
+   > 서비스impl을 탄다.  (egovframework.example.sample.service.impl)
+   > 그리고 DAO를 타고 DAO에서 sql(resources/egovframework/sqlmap/example/sample/샘플sql)을 타고
+   > 결과가 반환되어 다시 impl에 들어오고 > 그 결과가 서비스로 > 컨트롤러를 갔다가
+   > jsp로 돌려져서 사용자에게 보여지게 된다. (webapp/WEB-INF/jsp/egovframework/example/sample) 
+
+** SampleVO는 전자정부에서 VO는 테이블이라고 생각하면 된다.
+
+====================
 
 - 프로젝트는 톰캣7 버전으로 실행해 보도록 하겠습니다.
 

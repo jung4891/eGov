@@ -58,7 +58,9 @@
     </select>
 	
 	<select id="sampleDAO.selectSampleList" parameterClass="searchVO" resultClass="egovMap">
-
+			
+			<!-- 아래 데이터들이 searchVO에 의해 reg_user가 regUser로 변경되어 egovMap형태로 결과값이 담기게 된다. -->
+			
 			SELECT
 				ID, NAME, DESCRIPTION, USE_YN, REG_USER
 			FROM SAMPLE

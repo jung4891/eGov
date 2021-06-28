@@ -90,6 +90,9 @@ public class SampleDAO extends EgovAbstractDAO {
 	 * @return 글 목록
 	 * @exception Exception
 	 */
+	
+	// DAO에서 sample.EgovSample_Sample_SQL.xml의 쿼리문(sampleDAO.selectSampleList)으로 간다.
+	// 쿼리 동작후 결과가 서비스 impl > 컨트롤러로 List<> 형태로 넘어간다.
 	public List<?> selectSampleList(SampleDefaultVO searchVO) throws Exception {
 		return list("sampleDAO.selectSampleList", searchVO);
 	}

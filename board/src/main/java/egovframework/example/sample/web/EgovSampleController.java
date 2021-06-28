@@ -93,6 +93,12 @@ public class EgovSampleController {
 		searchVO.setLastIndex(paginationInfo.getLastRecordIndex());
 		searchVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
 
+		
+		// 서비스 > 서비스impl > DAO > sql실행 > DAO > 서비스impl > sampleList에 쿼리결과문 담김. (서버쪽 데이터)
+		// 이게 resultList에 담겨져서 sample/egovSampleList.jsp(view화면)로 보내짐 
+		// (board/src/main/webapp/WEB-INF/jsp/egovframework/example는 디폴트로 설정되어 있음)
+		// (dispatcher-servlet.xml > line49에서 위 디폴트 내용 확인할 수 있다) 
+		// (넘어가는 경로 찾을때 Ctrl누른상태로 함수명에 마우스 올리면 선언부분과 실행부분 바로 갈수 있다.)
 		List<?> sampleList = sampleService.selectSampleList(searchVO);
 		model.addAttribute("resultList", sampleList);
 

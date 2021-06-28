@@ -101,6 +101,8 @@
         				<col width="60"/>
         			</colgroup>
         			<tr>
+        				<!-- resources.ego.message > message-common.properties에 설정이 되어있다. 
+        					 여러 언어를 지원할 수 있도록 이렇게 해놨다. -->
         				<th align="center">No</th>
         				<th align="center"><spring:message code="title.sample.id" /></th>
         				<th align="center"><spring:message code="title.sample.name" /></th>
@@ -109,6 +111,7 @@
         				<th align="center"><spring:message code="title.sample.regUser" /></th>
         			</tr>
         			<c:forEach var="result" items="${resultList}" varStatus="status">
+        			<!-- c:forEach는 jsp의 태그. for문 돌릴때 사용함. items에서 result하나씩 꺼내옴 -->
             			<tr>
             				<td align="center" class="listtd"><c:out value="${paginationInfo.totalRecordCount+1 - ((searchVO.pageIndex-1) * searchVO.pageSize + status.count)}"/></td>
             				<td align="center" class="listtd"><a href="javascript:fn_egov_select('<c:out value="${result.id}"/>')"><c:out value="${result.id}"/></a></td>
@@ -121,6 +124,7 @@
         		</table>
         	</div>
         	<!-- /List -->
+        	<!-- 페이징 처리가 이 부분이 -->
         	<div id="paging">
         		<ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_egov_link_page" />
         		<form:hidden path="pageIndex" />

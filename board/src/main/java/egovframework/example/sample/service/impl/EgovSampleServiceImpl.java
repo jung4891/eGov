@@ -125,6 +125,8 @@ public class EgovSampleServiceImpl extends EgovAbstractServiceImpl implements Eg
 	 * @return 글 목록
 	 * @exception Exception
 	 */
+	
+	// DAO를 부른다.
 	@Override
 	public List<?> selectSampleList(SampleDefaultVO searchVO) throws Exception {
 		return sampleDAO.selectSampleList(searchVO);

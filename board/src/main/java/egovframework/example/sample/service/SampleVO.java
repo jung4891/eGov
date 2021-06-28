@@ -48,7 +48,8 @@ public class SampleVO extends SampleDefaultVO {
 	private String useYn;
 
 	/** 등록자 */
-	private String regUser;
+	private String regUser;	
+	// 실제 db 컬럼명이 reg_user인데 전정부에서는 일반적인 변수 명명규칙이 regUser 이런식으로 작성을 한다.
 
 	public String getId() {
 		return id;
