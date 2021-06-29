@@ -1,21 +1,30 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <!-- 윗 부분 넣어줘야 한글 안깨짐 -->
-<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="ui"     uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!-- jstl을 쓰기위해서 넣어줌 -->
 
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<title>부트스트랩 게시판 시작!</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="<c:url value='/css/bootstrap/css/bootstrap.min.css'/>">
-<script src="<c:url value='/js/jquery-3.5.1.min.js'/>"></script>
-<script src="<c:url value='/css/bootstrap/js/bootstrap.min.js'/>"></script>
-<!-- jstl태그의 c:url을 사용하면 위 경로앞에 /board/~~ 로 루트가 잡혀서 제대로 작동한다. -->
+	<title>부트스트랩 게시판 시작!</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="<c:url value='/css/bootstrap/css/bootstrap.min.css'/>">
+	<script src="<c:url value='/js/jquery-3.5.1.min.js'/>"></script>
+	<script src="<c:url value='/css/bootstrap/js/bootstrap.min.js'/>"></script>
+	<!-- jstl태그의 c:url을 사용하면 위 경로앞에 /board/~~ 로 루트가 잡혀서 제대로 작동한다. -->
+	<script type="text/javascript">
+	function enroll() {
+		location.href = "<c:url value='/mgmt.do'/>";
+		// c:url 태그는 화면의 전체경로(http://localhost:8787/board/)를 가져와서 붙여주는 태그다.
+	}
+	function view() {
+		location.href = "<c:url value='/view.do'/>";
+	}
+	</script>
 
 </head>
 <body>
@@ -49,33 +58,27 @@
 					<table class="table table-hover">
 						<thead>
 							<tr>
-								<th>Firstname</th>
-								<th>Lastname</th>
-								<th>Email</th>
+								<th>게시물번호</th>
+								<th>제목</th>
+								<th>조회수</th>
+								<th>작성자</th>
+								<th>작성일</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td>John</td>
-								<td>Doe</td>
-								<td>john@example.com</td>
-							</tr>
-							<tr>
-								<td>Mary</td>
-								<td>Moe</td>
-								<td>mary@example.com</td>
-							</tr>
-							<tr>
-								<td>July</td>
-								<td>Dooley</td>
-								<td>july@example.com</td>
+								<td><a href="javascript:view();">1</a></td>
+								<td><a href="javascript:view();">1번게시물</a></td>
+								<td>1</td>
+								<td>관리자</td>
+								<td>2021-06-29</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 			</div>
 			<div class="panel-footer">
-			  <button type="button" class="btn btn-default">등록</button>
+				<button type="button" class="btn btn-default" onclick="enroll();">등록</button>
 			</div>
 		</div>
 	</div>

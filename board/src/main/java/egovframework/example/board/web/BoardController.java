@@ -10,7 +10,20 @@ public class BoardController {
 	
 	@RequestMapping(value = "/list.do")
 	public String list(ModelMap model) throws Exception {
-
-		return "board/list";
+		System.out.println("board에서 컨트롤러 작동해서 list 불러옴");
+		return "board/list"; 
 	}
+	
+	@RequestMapping(value = "/mgmt.do")
+	public String mgmt(ModelMap model) throws Exception {
+		System.out.println("board 컨트롤러 > mgmt 호출");
+		return "board/mgmt";
+	}
+
+	@RequestMapping(value = "/view.do")
+	public String view(ModelMap model) throws Exception {
+		System.out.println("board 컨트롤러 > view 호출");
+		return "board/view";
+	}
+	
 }
