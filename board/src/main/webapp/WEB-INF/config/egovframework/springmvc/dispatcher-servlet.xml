@@ -47,6 +47,7 @@
     <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="1"
 	    p:viewClass="org.springframework.web.servlet.view.JstlView"
 	    p:prefix="/WEB-INF/jsp/egovframework/example/" p:suffix=".jsp"/> 
+	    <!-- 이 부분이 컨트롤러의 요청매핑에서 return의 앞부분 기본 경로설정과 뒤에 .jsp 만들어주는 부분 -->
 
     <!-- For Pagination Tag -->
     <bean id="imageRenderer" class="egovframework.example.cmmn.web.EgovImgPaginationRenderer"/>
