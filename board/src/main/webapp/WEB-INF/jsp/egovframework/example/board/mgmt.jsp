@@ -107,8 +107,12 @@ $( document ).ready(function() {
 				</form>
 			</div>
 			<div class="panel-footer">
-				<button type="button" class="btn btn-default" onclick="enroll();">등록</button>
-				<button type="button" class="btn btn-default">수정</button>
+				<c:if test="${empty boardVO.idx}">		<!-- 등록할때는 boarVO에 idx가 없으므로! -->
+					<button type="button" class="btn btn-default" onclick="enroll();">등록</button>
+				</c:if>
+				<c:if test="${!empty boardVO.idx}">
+					<button type="button" class="btn btn-default">수정</button>
+				</c:if>
 				<button type="button" class="btn btn-default" onclick="cancel();">취소</button>
 			</div>
 		</div>
