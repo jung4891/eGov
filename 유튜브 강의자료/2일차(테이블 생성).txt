@@ -12,10 +12,11 @@
 - mariadb-10.3.11-winx64.msi 클릭 후 저장
 - 다운로드 파일 실행하여 설치 (비번 1234, 설치시 HeidiSQL이 생김.)
 
-- jdbc 다운로드 (따로 안함)
+- jdbc 다운로드 (5일차 세번째)
 https://downloads.mariadb.org/connector-java/
+mariadb-java-client-3.0.0-alpha-sources.jar > WEB-INF의 lib에 넣기
 
-- 마리아디비 전자정부프레임워크 연결 참조 (역시 따로 안함)
+- 마리아디비 전자정부프레임워크 연결 참조 (5일차 세번째)
 https://hanazuou.tistory.com/159
 
 - maven 설정 참조 사이트 (따로 안함)

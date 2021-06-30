@@ -1,0 +1,137 @@
+
+
+5일차(상세화면 댓글, 
+
+​=====================
+
+- 댓글달기 : BS Wells
+
+- 로그인 화면 수정 : BS Inputs > Select List
+
+- 로그인 아이디 비번 자동입력 및 ''값 처리
+
+- 로그인 처리 
+  - board.web 밑에 service, impl, VO 생성
+  - DAO말고 BoardMapper 생성
+
+* resources에 mappers > EgovSample_Sample_SQL.xml는 mybatis이고 (SimpleMapper사용)
+                  sample > EgovSample_Sample_SQL.xml는 ibatis이다. (SimpleDAO 사용)
+  ibatis가 버전업이 된게 mybatis다. 그래서 mybatis로 할꺼다.
+  mybatis는 sample.service.impl.SampleMapper와 연결되어 파라미터로 SampleVO를 받아 sql문을 만들어준다.
+  SimpleDAO(ibatis 사용)건 SimpleMapper(mybatis 사용)건 둘다 동작하는건 똑같다.  
+  EgovSampleServiceImpl.java의 55line에 잘 나뉘어 설명되어 있다.
+
+- 이어서
+  - resources > mappers에 Board_SQL 생성(샘플 복붙)
+  - java > impl에 BoardMapper.java 생성후 Board_SQL namespace 및 쿼리문 수정
+    sql-mapper-config 수정
+
+ -  BoardService, BoardServiceImpl 생성
+ -  컨트롤러  로그인 세션 처리
+ -  context-mapper로 impl의 mapper부분 연결
+ -  context-datasource에서 mariaDB 연결 
+    1) 2일차의 jar파일 다운후 WEB-INF의 lib에 넣기 
+       (보통은 https://hanazuou.tistory.com/159 에서 Maven의 dependency에 넣는다.)
+    2) 드라이버 클래스 네임 value값에 "org.mariadb.jdbc.Driver" 넣기
+    3) url에서 데이터베이스명으로 변경, root 1234 넣기
+-   context-transaction 수정
+- 로그아웃
+
+4회차
+- pom.xml은 maven project의 핵심파일이다.
+  이 프로젝트에서 사용하는 jar파일을 인터넷에서 자동으로 다운로드받아 설치하게 해줌.
+- 로그인시에만 등록버튼 보이게 처리, 상세화면에서도 수정, 삭제 동일처리
+ - 자바 jsp가 제일 처음에 index.jsp로 가는건 
+    WEB-INF의 web.xml에 <welcome-file-list>에 설정을 해놨기 때문!
+    즉, 서비스에 들어왔을때 가장 최초로 띄우는 페이지를 설정하는 곳임.
+- 목록조회 (비로그인해도 다 보이게) list.do 수정
+   등록...
+=====================
+
+오늘은 메인화면 관련 자바코딩을 해보겠습니다.
+
+​
+
+1. 메인화면 코딩
+
+1) html 복사 후 리네임
+
+- 먼저 html을 복사하여 jsp로 만듭니다.
+
+- 소스상단에 jsp로 인식되기위한 코드를 붙입니다.
+
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+
+- 그 아래 jstl을 사용하기 위한 기본코드를 붙입니다.
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
+<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
+
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
+​
+
+2. 자바소스 기본 처리
+
+1) sample 폴더 복사 후 리네임 main
+
+- 파일명 수정 및 내용 수정
+
+2) sample 폴더 복사 후 리네임 board
+
+- 파일명 수정 및 내용 수정
+
+​
+
+3. 메인 컨트롤러 작업
+
+1) 루트 리퀘스트 처리
+
+2) 서비스 작업 : 소스 수정 순서는 대략 아래와 같이 하면 됩니다.
+
+- vo
+
+- controller
+
+- service
+
+- impl
+
+- dao = mapper
+
+- query = mybatis
+
+​
+
+4. 세션 및 로그인 처리
+
+5) 로그인 및 로그아웃 처리
+
+​
+
+5. 마무리
+
+- 기본적인 코딩 절차가 눈에 보이시나요?
+
+- 몇번 해보면 아시게 될거에요 ^^
+
+- 프로젝트 마다 정의된 프레임워크가 다르고 그에 따른 코딩 규칙도 약간씩 달라진답니다.
+
+- 오늘도 고생하셨습니다. 감사합니다.
+
+​
+
+유튜브동영상 : 전자정부프레임워크와 마리아디비를 이용한 게시판 만들기 - 5일차
+
+유튜브동영상 : 전자정부프레임워크와 마리아디비를 이용한 게시판 만들기 - 5일차 두번째
+
+유튜브동영상 : 전자정부프레임워크와 마리아디비를 이용한 게시판 만들기 - 5일차 세번째
+
+유튜브동영상 : 전자정부프레임워크와 마리아디비를 이용한 게시판 만들기 - 5일차 네번째

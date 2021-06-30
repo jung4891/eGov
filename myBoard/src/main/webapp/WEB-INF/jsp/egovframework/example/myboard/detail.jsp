@@ -63,6 +63,29 @@
 				<button type="button" class="btn btn-default" onclick="cancel();">목록</button>
 			</div>
 		</div>
+		<div class="well well-sm">작성자/등록일<br/>내용</div>
+		<div class="well well-lg">
+			<form class="form-horizontal" method="post" action="reply.do">
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="writer">작성자/등록일:</label>
+						<div class="col-sm-10 control-label" style="text-align: left">
+								<input type="text" class="form-control" id="writer" name="writer" 
+								  placeholder="작성자를 입력하세요." maxlength="15" style="width:40%; float: left"> 
+								<input type="text" class="form-control" id="indate" name="indate"
+								  placeholder="등록일을 입력하세요." maxlength="10" style="width:40%"> 
+					</div>
+				</div>
+					<div class="form-group">
+						<label class="control-label col-sm-2" for="contents">댓글:</label>
+						<div class="col-sm-10"> 
+  							<textarea class="form-control" rows="3" id="reply" name="reply" maxlength="300"></textarea>
+						</div>
+					</div>
+					<button type="submit" class="btn btn-default">댓글등록</button>
+					현재는 댓글은 수정과 삭제를 할 수 없습니다.
+					<!-- 댓글 수정 삭제는 별도로 -->
+			</form>
+		</div>
 	</div>
 </body>
 </html>

@@ -67,6 +67,8 @@
 
 ====================
 
+** 전자정부에서는 Controller, VO, Service, ServiceImpl, Mapper(DAO)라 한 세트다.
+
 ** 처음에 화면띄우게 되면 webapp의 index.jsp가 실행된다. 그러면 egovSampleList.do가 호출된다.
    > 그럼 컨트롤러를 타게 되고   (egovframework.example.sample.web)
    > 서비스를 타고   (egovframework.example.sample.service)

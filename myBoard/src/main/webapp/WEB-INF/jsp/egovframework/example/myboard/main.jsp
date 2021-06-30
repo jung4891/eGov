@@ -17,6 +17,11 @@
 <script src="<c:url value='/css/bootstrap/js/bootstrap.min.js'/>"></script>
 <!-- jstl태그의 c:url을 사용하면 위 경로앞에 /board/~~ 로 루트가 잡혀서 제대로 작동한다. -->
 <script type="text/javascript">
+
+	$( document ).ready(function() {
+		// $('#h1').text('test');		
+	});
+	
 	function enroll() {
 		location.href = "<c:url value='/enroll.do'/>";
 		// c:url 태그는 화면의 전체경로(http://localhost:8787/myboard/)를 가져와서 붙여주는 태그다.
@@ -24,23 +29,52 @@
 	function detail() {
 		location.href = "<c:url value='/detail.do'/>";
 	}
+	function setPwd(user_id) {
+		if( user_id == "admin" ){
+			$('#password').val('manager');
+		}else if( user_id == "guest" ){
+			$('#password').val('guest');
+		}else if( user_id == "guest2" ){
+			$('#password').val('guest2');
+		}else{
+			$('#password').val('');			
+		}
+	}
+	function check() {
+		// alert('1');
+		if( $('#user_id').val() == '') {
+			alert("아이디를 입력하세요!");
+			return false;
+		}
+		if( $('#password').val() == '') {
+			alert("비밀번호를 입력하세요!");
+			return false;
+		}
+		return true;
+	}
 </script>
 </head>
 <body>
 	<div class="container">
 		<h1>메인</h1>
+		<h1 id="h1"></h1>
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<form class="form-inline" action="/login.do">
+				<form class="form-inline" method="post" action="<c:url value='/login.do'/>">
 					<div class="form-group">
-						<label for="id">ID:</label>
-						<input type="text" class="form-control" id="id">
+						<label for="user_id">ID:</label>
+						  <select class="form-control" id="user_id" name="user_id" onchange="setPwd(this.value);">
+						    <option value="">선택해주세요</option>
+						    <option value="admin">관리자</option>
+						    <option value="guest">사용자</option>
+						    <option value="guest2">사용자2</option>
+						  </select>
 					</div>
 					<div class="form-group">
-						<label for="pwd">Password:</label>
-						<input type="password" class="form-control" id="pwd">
+						<label for="password">Password:</label>
+						<input type="password" class="form-control" id="password" name="password">
 					</div>
-					<button type="submit" class="btn btn-default">로그인</button>
+					<button type="submit" class="btn btn-default" onclick="return check();">로그인</button>
 				</form>
 			</div>
 			<div class="panel-body">

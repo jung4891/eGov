@@ -114,7 +114,7 @@
 			<version>2.3.2</version>
 		</dependency>
         
-        <!-- mysql이나 oracle DB 사용시 아래 설정 추가  
+        <!-- mysql이나 oracle DB 사용시 아래 설정 추가  -->
         <dependency>
             <groupId>com.googlecode.log4jdbc</groupId>
             <artifactId>log4jdbc</artifactId>
@@ -132,38 +132,44 @@
             <artifactId>commons-dbcp</artifactId>
             <version>1.4</version>
         </dependency>
-        
+<!--         
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.31</version>
-        </dependency>
-
-        <dependency>
+        </dependency> -->
+<!-- 
+        <dependency> 
             <groupId>ojdbc</groupId>
             <artifactId>ojdbc</artifactId>
             <version>14</version>
             <scope>system</scope>
             <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/ojdbc-14.jar</systemPath>
         </dependency>
-        -->
+         -->
+        <!-- https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client (mariadb jdbc java버전 맞춰서 추가)-->
+				<dependency>
+				    <groupId>org.mariadb.jdbc</groupId>
+				    <artifactId>mariadb-java-client</artifactId>
+				    <version>1.8.0</version>
+				</dependency>
         
-        <!--  
-		        다음과 같이 taglib 사용 시     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-			다음과 같은 에러에 직면할 수 있다.
-			Can not find the tag library descriptor for "http://java.sun.com/jsp/jstl/core"
-			
-			이는 JSTL (JSP Standard Tag Library)이 없어서 발생한 문제로
-			아래과 같이 메이븐 디펜던시 (Maven Dependency)를 추가해주면 된다.
-			
-			메이븐을 사용하지 않는다면,
-			WEB-INF/lib에 jstl.jar를 추가해주면 된다.
-        -->
-          <dependency>
+        <dependency>
 			   <groupId>jstl</groupId>
 			   <artifactId>jstl</artifactId>
 			   <version>1.2</version>
-		  </dependency>
+		 	  </dependency>
+		 	<!--  
+		        다음과 같이 taglib 사용 시     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+				다음과 같은 에러에 직면할 수 있다.
+				Can not find the tag library descriptor for "http://java.sun.com/jsp/jstl/core"
+			
+				이는 JSTL (JSP Standard Tag Library)이 없어서 발생한 문제로
+				아래과 같이 메이븐 디펜던시 (Maven Dependency)를 추가해주면 된다.
+			
+				메이븐을 사용하지 않는다면,
+				WEB-INF/lib에 jstl.jar를 추가해주면 된다.
+        -->
 	</dependencies>
 
 	<build>
