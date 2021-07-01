@@ -18,14 +18,14 @@
     </bean>
     -->  
     
-    <!-- Mysql (POM에서 commons-dbcp, mysql-connector-java 관련 라이브러리 설정 ) 
+<!--     Mysql (POM에서 commons-dbcp, mariaDB 관련 라이브러리 설정 , context-mapper.xml에서 impl의 mapper를 service와 연결)  -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://127.0.0.1:3306/example" />
-        <property name="username" value="user"/>
-        <property name="password" value="password"/>
+        <property name="url" value="jdbc:mysql://127.0.0.1:3306/sendmail" />
+        <property name="username" value="root"/>
+        <property name="password" value="1234"/>
     </bean>
-    -->
+   
     
     <!-- oracle (POM에서 commons-dbcp, ojdbc(라이센스 사항으로 별도로 배포되지 않음) 관련 라이브러리 설정)
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">

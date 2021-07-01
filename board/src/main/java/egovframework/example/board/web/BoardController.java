@@ -22,7 +22,7 @@ import egovframework.rte.fdl.property.EgovPropertyService;
 // @Controller 어노테이션을 써줘야 스프링 프레임웍에서  이 클래스가 컨트롤러 라는걸 인식하게 된다.
 @Controller 
 public class BoardController {
-	
+	 
 	/** BoardService */
 	@Resource(name = "boardService")
 	private BoardService boardService;
@@ -53,10 +53,12 @@ public class BoardController {
 		List<?> list = boardService.selectBoardList(boardVO);
 		model.addAttribute("resultList", list);
 		// #ModelAttribute는 클라이언트에서 서버로 전달하는것. model은 반대로 전달하는 것.
-
+ 
 		int totCnt = boardService.selectBoardListTotCnt(boardVO);
 //		paginationInfo.setTotalRecordCount(totCnt);
 //		model.addAttribute("paginationInfo", paginationInfo);
+		
+		System.out.println("board의 list 호출");
 		return "board/list"; 
 	}
 	
