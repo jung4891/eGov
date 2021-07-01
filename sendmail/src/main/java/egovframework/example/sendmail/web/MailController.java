@@ -11,6 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import egovframework.example.sendmail.service.MailService;
 import egovframework.example.sendmail.service.MailVO;
+import egovframework.rte.fdl.property.EgovPropertyService;
 
 /*
 < 컨트롤러 수정해도 서버에서 자동 빌드가 안되고 웹페이지는 Not Found 뜰떄... >
@@ -25,15 +26,20 @@ public class MailController {
 	@Resource(name = "mailService")
 	private MailService mailService;
 	
+	/** EgovPropertyService */
+	@Resource(name = "propertiesService")
+	protected EgovPropertyService propertiesService;
+	// PropertyService는 resources > spring의 여러 .xml파일들의 값들을 가지고 올 수 있게 한다.
+	
 	@RequestMapping(value = "/main.do")
 	public String main(ModelMap model) throws Exception {
-		System.out.println("sendmail의 main 호출");
+//		System.out.println("sendmail의 main 호출");
 		return "sendmail/main"; 
 	}
 	
 	@RequestMapping(value = "/loginPage.do")
 	public String loginPage(ModelMap model) throws Exception {
-		System.out.println("sendmail의 login 호출");  
+//		System.out.println("sendmail의 login 호출");  
 		return "sendmail/login";        
 	}
 
@@ -43,23 +49,33 @@ public class MailController {
 			          	HttpServletRequest request,
 			          	RedirectAttributes r, ModelMap model) throws Exception {
 		
-		System.out.println("여기는 오나?");
+		System.out.println("컨트롤러 /login.do");
 		MailVO mailVO = new MailVO();
 		mailVO.setUserId(user_id);
 		mailVO.setPassword(password);
 		String user_name = mailService.selectLoginCheck(mailVO);
-		System.out.println("user_name:" + user_name);
+//		System.out.println("user_name:" + user_name);
 		
-//		if( user_name != null && !"".equals(user_name)) {
-//			request.getSession().setAttribute("userId", user_id);
-//			request.getSession().setAttribute("userName", user_name);  // Mail_SQL에서 name 가져오게끔 설정.
-//		}else {
-//			request.getSession().setAttribute("userId", "");
-//			request.getSession().setAttribute("userName", "");
+		if ( user_name != null && !"".equals(user_name)) {
+			request.getSession().setAttribute("userId", user_id);
+			request.getSession().setAttribute("userName", user_name);  // Mail_SQL에서 name 가져오게끔 설정.
+			return "redirect:/main.do";
+		} else {
+			request.getSession().setAttribute("userId", "");
+			request.getSession().setAttribute("userName", "");
+			model.addAttribute("msg", "사용자 정보가 올바르지 않습니다.");
 //			r.addFlashAttribute("msg", "사용자 정보가 올바르지 않습니다.");
-//
-//		}
+			System.out.println("여기는 오나??");
+			return "sendmail/login";
+		}
+	}
+	
+	@RequestMapping(value = "/logout.do")
+	public String logout(ModelMap model, HttpServletRequest request) throws Exception {
+		request.getSession().invalidate();
+//		return "board/list";
 		return "redirect:/main.do";
 	}
+	
 	 
 }

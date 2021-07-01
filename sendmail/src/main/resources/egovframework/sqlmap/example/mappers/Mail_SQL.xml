@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="egovframework.example.mail.service.impl.MailMapper">
-<!-- namespace는 Mapper의 풀경로를 의미한다. -->
+<mapper namespace="egovframework.example.sendmail.service.impl.MailMapper">
+<!-- 
+			namespace는 Mapper의 풀경로를 의미한다.
+      Ctrl+F로 단어 변경시 경로는 제외해서 하기!!!!!!  sendmail을 mail로 하면 
+      RuntimeException case :: RuntimeException 
+			Invalid bound statement (not found) 와 같은 애리가 남!!!!!!!!!!!!!
+      -->
+      
 
 <!-- 
 			Class/TypeAlias 'MailVO' not found. -> config에 설정이 되어있지 않아서 생기는 오류
@@ -24,8 +30,6 @@
 <!-- resultMap은 안쓸껀데 이렇게도 던질 수 있다. -->
 
 	<insert id="insertMail" parameterType="mailVO">
-	
-
 
 			INSERT INTO TB_BOARD
 				( 													<!-- idx는 자동증가되므로 넣을 필요가 없다. -->

@@ -10,8 +10,15 @@
 <%=request.getContextPath()%>/css/bootstrap/
 href="<c:url value='/main.do'/>"
  -->
- 
+
+<script src="<c:url value='/js/jquery-3.5.1.min.js'/>"></script>
 <script type="text/javascript">
+
+$( document ).ready(function() {
+	<c:if test="${!empty msg}">  
+    	alert("${msg}"); 
+  </c:if> 
+});
 
 function check() {
 	// alert('1');
@@ -25,6 +32,7 @@ function check() {
 	}
 	return true;
 }
+
 
 </script>
 
