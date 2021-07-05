@@ -65,7 +65,7 @@ href="<c:url value='/main.do'/>"
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item active">
-        <a class="nav-link" href="<c:url value='/main.do'/>">
+        <a class="nav-link" href="<c:url value='/wholeMaliBox.do'/>">
         <i class="far fa-envelope-open"></i>
             <span>전체메일</span></a>
       </li>

@@ -77,5 +77,10 @@ public class MailController {
 		return "redirect:/main.do";
 	}
 	
+	@RequestMapping(value = "/wholeMaliBox.do")
+	public String wholeMaliBox(ModelMap model) throws Exception {
+		return "sendmail/wholeMaliBox";        
+	}
+	
 	 
 }
