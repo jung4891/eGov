@@ -129,6 +129,16 @@ public class MailServiceImpl extends EgovAbstractServiceImpl implements MailServ
 	public List<?> selectMailList(MailVO vo) throws Exception {
 		return mailDAO.selectMailList(vo);
 	}
+	
+	@Override
+	public List<?> selectInboxList(MailVO vo) throws Exception {
+		return mailDAO.selectInboxList(vo);
+	}
+	
+	@Override
+	public List<?> selectOutboxList(MailVO vo) throws Exception {
+		return mailDAO.selectOutboxList(vo);
+	}
 
 	/**
 	 * 글 총 갯수를 조회한다.

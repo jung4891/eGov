@@ -77,6 +77,8 @@ public interface MailMapper {
 	 * @exception Exception
 	 */
 	List<?> selectMailList(MailVO vo) throws Exception;
+	List<?> selectInboxList(MailVO vo) throws Exception;
+	List<?> selectOutboxList(MailVO vo) throws Exception;
 
 	/**
 	 * 글 총 갯수를 조회한다.

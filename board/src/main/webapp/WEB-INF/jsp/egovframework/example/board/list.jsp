@@ -29,8 +29,8 @@
 		location.href = "<c:url value='/mgmt.do'/>";
 		// c:url 태그는 화면의 전체경로(http://localhost:8787/board/)를 가져와서 붙여주는 태그다.
 	}
-	function view() {
-		location.href = "<c:url value='/view.do'/>";
+	function view(idx) {
+		location.href = "<c:url value='/view.do'/>?idx="+idx;
 	}
 	function setPwd(user_id) {
 		if( user_id == "admin" ){
@@ -117,8 +117,8 @@
 						<tbody>
 						<c:forEach var="result" items="${resultList}" varStatus="status">
 							<tr>
-								<td><a href="javascript:view();"><c:out value="${result.idx}"/></a></td>
-								<td><a href="javascript:view();"><c:out value="${result.title}"/></a></td>
+								<td><a href="javascript:view('${result.idx}');"><c:out value="${result.idx}"/></a></td>
+								<td><a href="javascript:view('${result.idx}');"><c:out value="${result.title}"/></a></td>
 								<td><c:out value="${result.count}"/></td>
 								<td><c:out value="${result.writerNm}"/></td>
 								<td><c:out value="${result.indate}"/></td>

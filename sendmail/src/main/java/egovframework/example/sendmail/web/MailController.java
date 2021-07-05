@@ -1,10 +1,15 @@
 package egovframework.example.sendmail.web;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -12,6 +17,25 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import egovframework.example.sendmail.service.MailService;
 import egovframework.example.sendmail.service.MailVO;
 import egovframework.rte.fdl.property.EgovPropertyService;
+
+// 메일전송 관련
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Date;
+import java.util.Properties;
+
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMessage.RecipientType;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.util.ByteArrayDataSource;
 
 /*
 < 컨트롤러 수정해도 서버에서 자동 빌드가 안되고 웹페이지는 Not Found 뜰떄... >
@@ -59,7 +83,9 @@ public class MailController {
 		if ( user_name != null && !"".equals(user_name)) {
 			request.getSession().setAttribute("userId", user_id);
 			request.getSession().setAttribute("userName", user_name);  // Mail_SQL에서 name 가져오게끔 설정.
-			return "redirect:/main.do";
+			user_name = URLEncoder.encode(user_name, "UTF-8");	// ★ 한글을 파라미터로 보낼시 ??? 인코딩 애러처리
+			return "redirect:/inbox.do?userName=" + user_name;  // 로그인한 사용자의 수신함을 출력하기 위해서 파라미터 사용.
+			// 이때 MailVO에서 userName을 변수로 선언하고 getter와 setter를 만들어줘야 정상작동한다. 파라미터로 가는데도 VO가 필요한듯?
 		} else {
 			request.getSession().setAttribute("userId", "");
 			request.getSession().setAttribute("userName", "");
@@ -74,12 +100,105 @@ public class MailController {
 	public String logout(ModelMap model, HttpServletRequest request) throws Exception {
 		request.getSession().invalidate();
 //		return "board/list";
-		return "redirect:/main.do";
+		return "redirect:/loginPage.do";
 	}
 	
-	@RequestMapping(value = "/wholeMaliBox.do")
-	public String wholeMaliBox(ModelMap model) throws Exception {
-		return "sendmail/wholeMaliBox";        
+	@RequestMapping(value = "/wholebox.do")
+	public String wholebox(@ModelAttribute("mailVO") MailVO mailVO, 
+							ModelMap model) throws Exception {
+		List<?> list = mailService.selectMailList(mailVO);
+		model.addAttribute("resultList", list);
+		return "sendmail/wholebox";        
+	}
+	
+	@RequestMapping(value = "/inbox.do")
+	public String inbox(@ModelAttribute("mailVO") MailVO mailVO, 
+							@RequestParam("userName") String userName,
+							ModelMap model) throws Exception {
+//		userName = URLDecoder.decode(userName, "UTF-8");
+//		System.out.println("inbox.do에서 userName:" + userName);
+		System.out.println("aaaaa");
+		List<?> list = mailService.selectInboxList(mailVO);
+		model.addAttribute("resultList", list);
+		return "sendmail/inbox";        
+	}
+	
+	@RequestMapping(value = "/outbox.do")
+	public String outbox(@ModelAttribute("mailVO") MailVO mailVO, 
+							ModelMap model) throws Exception {
+		List<?> list = mailService.selectOutboxList(mailVO);
+		model.addAttribute("resultList", list);
+		return "sendmail/outbox";        
+	}
+	
+	// 메일쓰기
+	
+	public static Message message = null;
+	
+	public static void createMail(){
+	   
+	    MimeBodyPart mbp = new MimeBodyPart();
+	    
+	    try{
+
+		     // 메일 제목 넣기
+		     message.setSubject("스프링-리눅스 메일보내기 테스트");
+
+		     // 메일 본문을 넣기
+		     message.setContent("Hello world", "text/html");
+
+		     // 보내는 날짜
+		     message.setSentDate(new Date());
+
+		     // 보내는 메일 주소
+		     message.setFrom(new InternetAddress("go_go_ssing@test.com"));
+		     
+		     // 받는 사람 메일주소
+		     InternetAddress[] receive_address = {new InternetAddress("thdgurwnd@gmail.com")};
+		     message.setRecipients(RecipientType.TO, receive_address);
+
+	   } catch (Exception e){
+		    	e.printStackTrace();
+	   }
+	}
+	
+	public static void connectSMTP(){
+
+	    Properties prop = new Properties();
+
+	    //사내 메일 망일 경우 smtp host 만 설정해도 됨 (특정 포트가 아닐경우)
+	    prop.put("mail.smtp.host", "192.168.245.130");
+	    prop.put("mail.smtp.starttls.enable","true");
+	    prop.put("mail.smtp.port", "25");
+
+	    Session session = Session.getDefaultInstance(prop, null);
+	    try{
+	     message = new MimeMessage(session);
+	    } catch (Exception e) {
+	     e.printStackTrace();
+	    }
+	}
+	
+	public static void sendMail(){
+
+	    try {
+	     Transport.send(message);
+	     System.out.println("메일전송 성공 !!");
+
+	    } catch (MessagingException e) {
+	     System.out.println("메일전송 실패 !!");
+	     e.printStackTrace();
+	    }
+	}
+	   
+	   
+	@RequestMapping(value = "/write.do")
+	public void write(@ModelAttribute("mailVO") MailVO mailVO, 
+							ModelMap model) throws Exception {
+	    connectSMTP();
+	    createMail();
+	    System.out.println("bbbb");
+	    sendMail();       
 	}
 	
 	 

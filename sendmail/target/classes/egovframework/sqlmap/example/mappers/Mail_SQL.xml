@@ -94,29 +94,43 @@
 				A.idx
 				, A.title
 				, A.contents
-				, IFNULL(A.count, 0) as count
-				, A.writer
+				, A.sender
+				, A.receiver
 				, A.indate
-				, B.user_name as writerNm
 			FROM 
 				tb_mail A 
-			LEFT JOIN 
-				tb_user B
-			ON
-				A.writer = B.user_id 
-			WHERE 1=1
-			<if test="searchKeyword != null and searchKeyword != ''">
-		        <choose>
-		            <when test="searchCondition == 0">
-						AND	ID LIKE '%' || #{searchKeyword} || '%'
-					</when>
-		            <when test="searchCondition == 1">
-						AND	NAME LIKE '%' || #{searchKeyword} || '%'
-					</when>
-				</choose>
-			</if>
-			ORDER BY idx 
-			<!-- LIMIT #{recordCountPerPage} OFFSET #{firstIndex} -->
+			WHERE 
+				A.receiver=#{userName} OR A.sender=#{userName} 
+
+	</select>
+	
+		<select id="selectInboxList" parameterType="mailVO" resultType="egovMap">
+
+			SELECT
+				A.idx
+				, A.title
+				, A.contents
+				, A.sender
+				, A.receiver
+				, A.indate
+			FROM 
+				tb_mail A 
+			WHERE A.receiver=#{userName}
+
+	</select>
+	
+		<select id="selectOutboxList" parameterType="mailVO" resultType="egovMap">
+
+			SELECT
+				A.idx
+				, A.title
+				, A.contents
+				, A.sender
+				, A.receiver
+				, A.indate
+			FROM 
+				tb_mail A 
+			WHERE A.sender=#{userName}
 	</select>
 
 	<select id="selectMailListTotCnt" parameterType="mailVO" resultType="int">

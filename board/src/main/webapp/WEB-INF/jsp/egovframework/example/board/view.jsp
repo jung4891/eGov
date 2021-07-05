@@ -1,10 +1,17 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <!-- 윗 부분 넣어줘야 한글 안깨짐 -->
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>		<!-- 아래  치환태그인 fn태그 선언 -->
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!-- jstl을 쓰기위해서 넣어줌 -->
+
+<%
+	// 치환태그 (상세화면의 내용에서 엔터키 적용되게끔)
+	pageContext.setAttribute("crcn", "\r\n"); 	// Space, Enter
+	pageContext.setAttribute("br", "<br/>");  	// br 태그
+%>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -33,32 +40,36 @@
 			</div>
 			<div class="panel-body">
 				<!-- 등록 -->
+				<!-- form태그는 출력시 위치가 중구난방이라 넣어줌 -->
+				<form id="form1" name="form1" class="form-horizontal" method="post" action="">
+				
 					<div class="form-group">
-						<label class="control-label col-sm-2" for="idx">게시물 아이디:</label>
+						<label class="control-label col-sm-2" for="">게시물 아이디:</label>
 						<div class="col-sm-10 control-label" style="text-align: left">
 						<!-- 색상 진하게 나와서 class에 control-label추가. 근데 오른쪽으로 가서 left 넣음 -->
-							게시물 아이디
+							<c:out value="${boardVO.idx}"/>
 						</div> 
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-2" for="title">제목:</label>
+						<label class="control-label col-sm-2" for="">제목:</label>
 						<div class="col-sm-10 control-label" style="text-align: left">
-							제목
+							<c:out value="${boardVO.title}"/>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-2" for="writer">작성자/등록일:</label>
+						<label class="control-label col-sm-2" for="">작성자/등록일:</label>
 						<div class="col-sm-10 control-label" style="text-align: left">
-							작성자/등록일
+							<c:out value="${boardVO.writerNm}"/> / <c:out value="${boardVO.indate}"/>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-2" for="contents">:</label>
+						<label class="control-label col-sm-2" for="">내용:</label>
 						<div class="col-sm-10 control-label" style="text-align: left">
-							내용
+							<!-- crcn(스페이스, 엔터) -> br태그로 변환. 위 함수 참고. escapeXml false는  <br/>을 그대로 출력하지 않겠다는 의미.  -->
+							<c:out value="${fn:replace(boardVO.contents, crcn, br)}" escapeXml="false"/>  
 						</div>
 					</div>
-
+				</form>
 			</div>
 			<div class="panel-footer">
 			<c:if test="${!empty sessionScope.userId}">

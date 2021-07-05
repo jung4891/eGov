@@ -86,7 +86,9 @@ public class BoardController {
 	}
 
 	@RequestMapping(value = "/view.do")
-	public String view(ModelMap model) throws Exception {
+	public String view(@ModelAttribute("boardVO") BoardVO boardVO, ModelMap model) throws Exception {
+		boardVO =  boardService.selectBoard(boardVO);
+		model.addAttribute("boardVO", boardVO);
 		return "board/view";
 	}
 	
