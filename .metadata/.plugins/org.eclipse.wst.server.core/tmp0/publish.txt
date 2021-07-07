@@ -1,3 +1,2 @@
 #Tomcat publish data
-#Tue Jul 06 15:53:03 KST 2021
-org.eclipse.jst.jee.server\:/binary\:C\:\\Users\\SMART-07\\.m2\\repository\\org\\springframework\\spring-web\\4.3.22.RELEASE\\spring-web-4.3.22.RELEASE.jar=WEB-INF/lib/spring-web-4.3.22.RELEASE.jar
+#Wed Jul 07 12:45:01 KST 2021

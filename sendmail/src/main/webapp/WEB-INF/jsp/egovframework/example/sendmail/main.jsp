@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <!-- 윗 부분 넣어줘야 한글 안깨짐 --> 
 
-<%@ include file ="../sendmail/header.jsp" %> 
+<%@ include file ="../sendmail/layout/header.jsp" %> 
 
 <title>두리안 메일서버 메인</title>
 
@@ -10,7 +10,7 @@
   <!-- Page Wrapper -->
   <div id="wrapper">
   
-  	<%@ include file ="../sendmail/sidebar.jsp" %>
+  	<%@ include file ="../sendmail/layout/sidebar.jsp" %>
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
@@ -36,7 +36,7 @@
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
           
-            <h1 class="h3 mb-0 text-gray-800">구현 예정..</h1> 
+            <h1 class="h3 mb-0 text-gray-800">메인페이지</h1> 
             
           </div> 
           
@@ -46,7 +46,7 @@
       </div>
       <!-- End of Main Content -->
 
-			<%@ include file ="../sendmail/footer.jsp" %>
+			<%@ include file ="../sendmail/layout/footer.jsp" %>
 
     </div>
     <!-- End of Content Wrapper -->

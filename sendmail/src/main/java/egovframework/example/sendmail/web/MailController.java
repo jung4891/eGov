@@ -1,11 +1,22 @@
 package egovframework.example.sendmail.web;
 
-import java.net.URLDecoder;
+import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import javax.annotation.Resource;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMessage.RecipientType;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -17,25 +28,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import egovframework.example.sendmail.service.MailService;
 import egovframework.example.sendmail.service.MailVO;
 import egovframework.rte.fdl.property.EgovPropertyService;
-
-// 메일전송 관련
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.Date;
-import java.util.Properties;
-
-import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMessage.RecipientType;
-import javax.mail.internet.MimeMultipart;
-import javax.mail.util.ByteArrayDataSource;
 
 /*
 < 컨트롤러 수정해도 서버에서 자동 빌드가 안되고 웹페이지는 Not Found 뜰떄... >
@@ -131,43 +123,56 @@ public class MailController {
 		return "sendmail/outbox";        
 	}
 	
-	// 메일쓰기
-	
-	public static Message message = null;
-	
-	public static void createMail(){
-	   
-	    MimeBodyPart mbp = new MimeBodyPart();
-	    
-	    try{
-
-		     // 메일 제목 넣기
-		     message.setSubject("스프링-리눅스 메일보내기 테스트");
-
-		     // 메일 본문을 넣기
-		     message.setContent("Hello world", "text/html");
-
-		     // 보내는 날짜
-		     message.setSentDate(new Date());
-
-		     // 보내는 메일 주소
-		     message.setFrom(new InternetAddress("go_go_ssing@test.com"));
-		     
-		     // 받는 사람 메일주소
-		     InternetAddress[] receive_address = {new InternetAddress("thdgurwnd@gmail.com")};
-		     message.setRecipients(RecipientType.TO, receive_address);
-
-	   } catch (Exception e){
-		    	e.printStackTrace();
-	   }
+	@RequestMapping(value = "/writePage.do")
+	public String writePage(@ModelAttribute("mailVO") MailVO mailVO, 
+							ModelMap model) throws Exception {
+		return "sendmail/write";       
 	}
+	
+	
+	@RequestMapping(value = "/write.do")
+	public String write(
+						HttpServletRequest request, HttpServletResponse response,
+						@RequestParam("receiverAddress") String receiverAddress,
+			          	@RequestParam("title") String title, 
+			          	@RequestParam("contents") String contents, 
+						ModelMap model) throws Exception {
+		String userId = request.getSession().getAttribute("userId").toString();
+		String senderAddress = userId + "@test.com";
+		String userName = request.getSession().getAttribute("userName").toString();
+		
+		MailVO mailVO = new MailVO();
+		mailVO.setTitle(title);
+		mailVO.setContents(contents);
+		mailVO.setSender(userName);
+		mailVO.setReceiver(receiverAddress);
+	    connectSMTP();
+	    createMail(senderAddress, receiverAddress, title, contents);
+	    
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+	    if (sendMail()) {
+	    	mailService.insertMail(mailVO);
+			out.println("<script>alert('메일 발송 성공!'); </script>");
+			out.flush();
+			return "sendmail/outbox";
+	    } else {
+	    	out.println("<script>alert('메일 발송 실패..'); </script>");
+			out.flush();
+	    	return "sendmail/outbox";
+	    }
+	    
+	}
+	
+	
+	// 메일쓰기
 	
 	public static void connectSMTP(){
 
 	    Properties prop = new Properties();
 
 	    //사내 메일 망일 경우 smtp host 만 설정해도 됨 (특정 포트가 아닐경우)
-	    prop.put("mail.smtp.host", "192.168.245.130");
+	    prop.put("mail.smtp.host", "192.168.245.131");
 	    prop.put("mail.smtp.starttls.enable","true");
 	    prop.put("mail.smtp.port", "25");
 
@@ -179,27 +184,53 @@ public class MailController {
 	    }
 	}
 	
-	public static void sendMail(){
+	public static Message message = null;
+	
+	public static void createMail(String senderAddress, String receiverAddress, String title, String contents){
+	   
+	    MimeBodyPart mbp = new MimeBodyPart();
+
+	    try{
+	    	
+		     // 보내는 메일 주소
+		     message.setFrom(new InternetAddress(senderAddress));
+		     
+		     // 받는 사람 메일주소
+		     InternetAddress[] receive_address = {new InternetAddress(receiverAddress)};
+		     message.setRecipients(RecipientType.TO, receive_address);
+
+		     // 메일 제목 넣기
+		     message.setSubject(title);
+		     
+		     // 메일 본문을 넣기
+		     message.setContent(contents, "text/html;charset=utf-8"); // charset 안넣으면 ????로 내용 전달됨.
+
+		     // 보내는 날짜
+		     message.setSentDate(new Date());
+		     
+	   } catch (Exception e){
+		    	e.printStackTrace();
+	   }
+	}
+	
+	
+	public static boolean sendMail(){
 
 	    try {
 	     Transport.send(message);
 	     System.out.println("메일전송 성공 !!");
+	     return true;
 
 	    } catch (MessagingException e) {
 	     System.out.println("메일전송 실패 !!");
 	     e.printStackTrace();
+	     return false;
 	    }
 	}
 	   
+	
 	   
-	@RequestMapping(value = "/write.do")
-	public void write(@ModelAttribute("mailVO") MailVO mailVO, 
-							ModelMap model) throws Exception {
-	    connectSMTP();
-	    createMail();
-	    System.out.println("bbbb");
-	    sendMail();       
-	}
+
 	
 	 
 }

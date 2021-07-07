@@ -31,18 +31,18 @@
 
 	<insert id="insertMail" parameterType="mailVO">
 
-			INSERT INTO TB_BOARD
+			INSERT INTO tb_mail
 				( 													<!-- idx는 자동증가되므로 넣을 필요가 없다. -->
-					TITLE
-				  , CONTENTS
-				  , count
-				  , writer 
+					title
+				  , contents
+				  , sender
+				  , receiver 
 				  , indate )
 			VALUES (
 				  #{title, jdbcType=VARCHAR}
 				  , #{contents, jdbcType=VARCHAR}
-				  , #{count, jdbcType=VARCHAR}
-				  , #{writer, jdbcType=VARCHAR}
+				  , #{sender, jdbcType=VARCHAR}
+				  , #{receiver, jdbcType=VARCHAR}
 				  , SYSDATE() )
 
 <!-- 값이 없을때 널값을 넣어도 오류가 안나는 mybatis 규칙 : 

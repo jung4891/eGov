@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <!-- 윗 부분 넣어줘야 한글 안깨짐 --> 
-<%@ include file ="../sendmail/header.jsp" %>
+<%@ include file ="../sendmail/layout/header.jsp" %>
 
 <title>받은메일함</title>
 <!-- Custom styles for this page -->
@@ -13,7 +13,7 @@
     <div id="wrapper">
 
 			<!-- 사이드바-->
-			<%@ include file ="../sendmail/sidebar.jsp" %>
+			<%@ include file ="../sendmail/layout/sidebar.jsp" %>
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -67,7 +67,7 @@
           </div>
           <!-- End of Main Content -->
 
-						<%@ include file ="../sendmail/footer.jsp" %>
+						<%@ include file ="../sendmail/layout/footer.jsp" %>
 
         </div>
         <!-- End of Content Wrapper -->
