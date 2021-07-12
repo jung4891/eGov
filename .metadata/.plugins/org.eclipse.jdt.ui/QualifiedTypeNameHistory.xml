@@ -6,4 +6,5 @@
 <fullyQualifiedTypeName name="java.net.URLEncoder"/>
 <fullyQualifiedTypeName name="java.net.URLDecoder"/>
 <fullyQualifiedTypeName name="java.io.PrintWriter"/>
+<fullyQualifiedTypeName name="egovframework.example.sendmail.service.impl.MailServiceImpl"/>
 </qualifiedTypeNameHistroy>

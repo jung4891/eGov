@@ -67,8 +67,9 @@ public class MailController {
 		
 		System.out.println("컨트롤러 /login.do");
 		MailVO mailVO = new MailVO();
-		mailVO.setUserId(user_id);
-		mailVO.setPassword(password);
+		mailVO.setUserId(user_id);		// guest
+		mailVO.setPassword(password);	// 1234
+		
 		String user_name = mailService.selectLoginCheck(mailVO);
 //		System.out.println("user_name:" + user_name);
 		
@@ -166,15 +167,19 @@ public class MailController {
 	
 	
 	// 메일쓰기
+
+	final static String portNumber = "25";
 	
 	public static void connectSMTP(){
 
+	    InetAddress inetAddress = InetAddress.getLocalHost();
+	    String ipAddress = inetAddress.getHostAddress();
 	    Properties prop = new Properties();
 
 	    //사내 메일 망일 경우 smtp host 만 설정해도 됨 (특정 포트가 아닐경우)
-	    prop.put("mail.smtp.host", "192.168.245.131");
+	    prop.put("mail.smtp.host", ipAddress);
 	    prop.put("mail.smtp.starttls.enable","true");
-	    prop.put("mail.smtp.port", "25");
+	    prop.put("mail.smtp.port", portNumber);
 
 	    Session session = Session.getDefaultInstance(prop, null);
 	    try{

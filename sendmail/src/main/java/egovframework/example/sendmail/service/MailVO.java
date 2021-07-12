@@ -42,8 +42,8 @@ public class MailVO extends SampleDefaultVO {
 	private String receiver;	
 	private String indate;	
 	
-	private String userId;
-	private String password;
+	private String userId;  
+	private String password; 
 	private String userName;
 	
 	
