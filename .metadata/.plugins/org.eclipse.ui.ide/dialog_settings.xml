@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+		<item value="C:\Workspace\eGov"/>
 		<item value="C:\Workspace\eGovFrameDev-3.9.0-64bit\workspace"/>
 		<item value="C:\Users\go_go\Desktop"/>
 		<item value="C:\Users\SMART-07\Desktop\SendMail"/>

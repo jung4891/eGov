@@ -1,7 +1,9 @@
 package egovframework.example.sendmail.web;
 
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -170,7 +172,7 @@ public class MailController {
 
 	final static String portNumber = "25";
 	
-	public static void connectSMTP(){
+	public static void connectSMTP() throws UnknownHostException{
 
 	    InetAddress inetAddress = InetAddress.getLocalHost();
 	    String ipAddress = inetAddress.getHostAddress();
