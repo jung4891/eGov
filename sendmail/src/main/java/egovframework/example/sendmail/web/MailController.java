@@ -169,11 +169,9 @@ public class MailController {
 	
 	
 	// 메일쓰기
-
 	final static String portNumber = "25";
 	
 	public static void connectSMTP() throws UnknownHostException{
-
 	    InetAddress inetAddress = InetAddress.getLocalHost();
 	    String ipAddress = inetAddress.getHostAddress();
 	    Properties prop = new Properties();

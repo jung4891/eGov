@@ -48,7 +48,7 @@ function check() {
                                         <div class="form-group">						
                                             <input type="text" class="form-control form-control-user"
                                                 id="user_id" name="user_id" 
-                                                placeholder="ID">
+                                                placeholder="ID"> 
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user"
