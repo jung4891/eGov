@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import egovframework.example.sendmail.service.MailService;
 import egovframework.example.sendmail.service.MailVO;
+import egovframework.example.sendmail.service.impl2.MailMapper2;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 
@@ -57,6 +58,9 @@ public class MailServiceImpl extends EgovAbstractServiceImpl implements MailServ
 	// TODO mybatis 사용
 	@Resource(name="mailMapper")
 	private MailMapper mailDAO;
+	
+	@Resource(name="mailMapper2")
+	private MailMapper2 mailDAO2;
 
 	/** ID Generation */
 	@Resource(name = "egovIdGnrService")
@@ -77,7 +81,7 @@ public class MailServiceImpl extends EgovAbstractServiceImpl implements MailServ
 //		vo.setId(id);
 //		LOGGER.debug(vo.toString());
 
-		mailDAO.insertMail(vo);
+		mailDAO2.insertMail(vo);
 		return vo.getIdx();
 	}
 
@@ -137,7 +141,7 @@ public class MailServiceImpl extends EgovAbstractServiceImpl implements MailServ
 	
 	@Override
 	public List<?> selectOutboxList(MailVO vo) throws Exception {
-		return mailDAO.selectOutboxList(vo);
+		return mailDAO2.selectOutboxList(vo);
 	}
 
 	/**

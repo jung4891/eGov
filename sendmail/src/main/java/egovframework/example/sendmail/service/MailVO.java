@@ -45,8 +45,17 @@ public class MailVO extends SampleDefaultVO {
 	private String userId;  
 	private String password; 
 	private String userName;
+	private String dept;		// 추가 및 getter setter 아래 추가.
+
+
 	
 	
+	public String getDept() {
+		return dept;
+	}
+	public void setDept(String dept) {
+		this.dept = dept;
+	}
 	public String getUserName() {
 		return userName;
 	}

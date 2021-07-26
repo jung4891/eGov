@@ -6,7 +6,7 @@
       Ctrl+F로 단어 변경시 경로는 제외해서 하기!!!!!!  sendmail을 mail로 하면 
       RuntimeException case :: RuntimeException 
 			Invalid bound statement (not found) 와 같은 애리가 남!!!!!!!!!!!!!
-      -->
+-->
       
 
 <!-- 

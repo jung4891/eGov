@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.example.sendmail.service.impl2.MailMapper2">
+<!-- 
+			namespace는 Mapper의 풀경로를 의미한다.
+      Ctrl+F로 단어 변경시 경로는 제외해서 하기!!!!!!  sendmail을 mail로 하면 
+      RuntimeException case :: RuntimeException 
+			Invalid bound statement (not found) 와 같은 애리가 남!!!!!!!!!!!!!
+-->
+      
+
+<!-- 
+			Class/TypeAlias 'MailVO' not found. -> config에 설정이 되어있지 않아서 생기는 오류
+  	  * sql-map-config.xml -> ibatis인 sample의 SQL을 가리키고
+ 		  * sql-mapper-config.xml-> 이게 mybatis인 Mail_SQL를 설정하는 것. 즉 여기서 MailVO를 설정해줘야 한다.
+ -->
+
+<!-- 
+		  context-datasource에서 Mysql db 연동
+ -->
+
+	<resultMap id="mail" type="egovframework.example.sendmail.service.MailVO">
+		<result property="idx" column="idx"/>
+		<result property="title" column="title"/>
+		<result property="contents" column="contents"/>
+		<result property="sender" column="sender"/>
+		<result property="receiver" column="receiver"/>
+		<result property="indate" column="indate"/>
+	</resultMap> 
+<!-- resultMap은 안쓸껀데 이렇게도 던질 수 있다. -->
+
+	<insert id="insertMail" parameterType="mailVO">
+
+			INSERT INTO tb_mail
+				( 													<!-- idx는 자동증가되므로 넣을 필요가 없다. -->
+					title
+				  , contents
+				  , sender
+				  , receiver 
+				  , indate )
+			VALUES (
+				  #{title, jdbcType=VARCHAR}
+				  , #{contents, jdbcType=VARCHAR}
+				  , #{sender, jdbcType=VARCHAR}
+				  , #{receiver, jdbcType=VARCHAR}
+				  , SYSDATE() )
+
+<!-- 값이 없을때 널값을 넣어도 오류가 안나는 mybatis 규칙 : 
+		 value1 = #{value1, jdbcType=VARCHAR} VO에 int값 설정시 INT로 설정-->
+		 
+	</insert>
+
+	<update id="updateMail">
+
+			UPDATE tb_mail
+			SET title=#{title, jdbcType=VARCHAR}
+				, contents=#{contents, jdbcType=VARCHAR}
+				  WHERE idx=#{idx}
+
+	</update>
+
+	<delete id="deleteMail">
+
+			DELETE FROM tb_mail
+			WHERE idx=#{idx}
+
+	</delete>
+
+	<select id="selectMail" resultMap="mail">
+
+			SELECT
+				A.idx
+				, A.title
+				, A.contents
+				, IFNULL(A.count, 0) as count <!-- mariaDB IFNULL은  oracle의 NVL임~~ -->
+				, A.writer
+				, A.indate
+				, B.user_name as writerNm
+			FROM 
+				tb_mail A 
+			LEFT JOIN 
+				tb_user B
+			ON
+				A.writer = B.user_id 
+			WHERE A.idx=#{idx}
+
+	</select>
+	<!-- select는 나중에 테이블이 추가될 수 있기에 Alias를 쓰면 좋다. -->
+	<!-- resultMap이나 resultType이나 아무거나 쓰면 된다. -->
+
+	<select id="selectMailList" parameterType="mailVO" resultType="egovMap">
+
+			SELECT
+				A.idx
+				, A.title
+				, A.contents
+				, A.sender
+				, A.receiver
+				, A.indate
+			FROM 
+				tb_mail A 
+			WHERE 
+				A.receiver=#{userName} OR A.sender=#{userName} 
+
+	</select>
+	
+		<select id="selectInboxList" parameterType="mailVO" resultType="egovMap">
+
+			SELECT
+				A.idx
+				, A.title
+				, A.contents
+				, A.sender
+				, A.receiver
+				, A.indate
+			FROM 
+				tb_mail A 
+			WHERE A.receiver=#{userName}
+
+	</select>
+	
+		<select id="selectOutboxList" parameterType="mailVO" resultType="egovMap">
+
+			SELECT
+				A.idx
+				, A.title
+				, A.contents
+				, A.sender
+				, A.receiver
+				, A.indate
+			FROM 
+				tb_mail A 
+			WHERE A.sender=#{userName}
+			
+	</select>
+
+	<select id="selectMailListTotCnt" parameterType="mailVO" resultType="int">
+
+			SELECT COUNT(*) totcnt
+			FROM tb_mail
+			WHERE 1=1
+			<if test="searchKeyword != null and searchKeyword != ''">
+		        <choose>
+		            <when test="searchCondition == 0">
+									AND ID LIKE '%' || #{searchKeyword} || '%'
+								</when>
+		            <when test="searchCondition == 1">
+									AND	NAME LIKE '%' || #{searchKeyword} || '%'
+								</when>
+				</choose>
+			</if>
+	</select>
+	
+	<select id="selectLoginCheck" parameterType="mailVO" resultType="String">
+
+			SELECT user_name
+			FROM tb_user
+			WHERE 1=1
+			AND user_id = #{userId}
+			AND password = #{password}
+
+	</select>
+
+</mapper>

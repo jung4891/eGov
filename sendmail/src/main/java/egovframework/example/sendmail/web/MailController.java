@@ -58,6 +58,11 @@ public class MailController {
 	@RequestMapping(value = "/loginPage.do")
 	public String loginPage(ModelMap model) throws Exception {
 //		System.out.println("sendmail의 login 호출");  
+	    InetAddress inetAddress = InetAddress.getLocalHost();
+	    String hostName = inetAddress.getHostName();
+	    String host = inetAddress.getHostAddress();
+	    System.out.println("hostAddress: " + host);
+	    System.out.println("hostName: " + hostName);
 		return "sendmail/login";        
 	}
 
@@ -79,7 +84,9 @@ public class MailController {
 			request.getSession().setAttribute("userId", user_id);
 			request.getSession().setAttribute("userName", user_name);  // Mail_SQL에서 name 가져오게끔 설정.
 			user_name = URLEncoder.encode(user_name, "UTF-8");	// ★ 한글을 파라미터로 보낼시 ??? 인코딩 애러처리
-			return "redirect:/inbox.do?userName=" + user_name;  // 로그인한 사용자의 수신함을 출력하기 위해서 파라미터 사용.
+			
+			return "sendmail/main";
+//			 return "redirect:/inbox.do?userName=" + user_name;  // 로그인한 사용자의 수신함을 출력하기 위해서 파라미터 사용.
 			// 이때 MailVO에서 userName을 변수로 선언하고 getter와 setter를 만들어줘야 정상작동한다. 파라미터로 가는데도 VO가 필요한듯?
 		} else {
 			request.getSession().setAttribute("userId", "");
@@ -113,7 +120,7 @@ public class MailController {
 //		userName = URLDecoder.decode(userName, "UTF-8");
 //		System.out.println("inbox.do에서 userName:" + userName);
 		System.out.println("aaaaa");
-		List<?> list = mailService.selectInboxList(mailVO);
+		List<?> list = mailService.selectInboxList(mailVO);		// mailVO는 여기서 안쓰임 userName으로 조회됨
 		model.addAttribute("resultList", list);
 		return "sendmail/inbox";        
 	}
@@ -127,8 +134,7 @@ public class MailController {
 	}
 	
 	@RequestMapping(value = "/writePage.do")
-	public String writePage(@ModelAttribute("mailVO") MailVO mailVO, 
-							ModelMap model) throws Exception {
+	public String writePage() throws Exception {
 		return "sendmail/write";       
 	}
 	
@@ -141,7 +147,7 @@ public class MailController {
 			          	@RequestParam("contents") String contents, 
 						ModelMap model) throws Exception {
 		String userId = request.getSession().getAttribute("userId").toString();
-		String senderAddress = userId + "@gmail.com";
+		String senderAddress = userId + "@test.com";
 		String userName = request.getSession().getAttribute("userName").toString();
 		
 		MailVO mailVO = new MailVO();
@@ -169,17 +175,21 @@ public class MailController {
 	
 	
 	// 메일쓰기
-	final static String portNumber = "25";
+	final static String port = "25";
 	
 	public static void connectSMTP() throws UnknownHostException{
 	    InetAddress inetAddress = InetAddress.getLocalHost();
-	    String ipAddress = inetAddress.getHostAddress();
+	    String host = inetAddress.getHostAddress();
+	    System.out.println("ipAddress: " + host);
 	    Properties prop = new Properties();
 
 	    //사내 메일 망일 경우 smtp host 만 설정해도 됨 (특정 포트가 아닐경우)
-	    prop.put("mail.smtp.host", ipAddress);
+	    prop.put("mail.smtp.host", host);
+	    prop.put("mail.smtp.port", port);
 	    prop.put("mail.smtp.starttls.enable","true");
-	    prop.put("mail.smtp.port", portNumber);
+//	    prop.put("mail.smtp.auth", "true");	    
+//	    prop.put("mail.smtp.ssl.enable", "true");
+//	    prop.put("mail.smtp.ssl.trust", host);
 
 	    Session session = Session.getDefaultInstance(prop, null);
 	    try{
