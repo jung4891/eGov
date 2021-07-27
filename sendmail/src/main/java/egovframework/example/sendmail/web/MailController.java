@@ -184,12 +184,13 @@ public class MailController {
 	    Properties prop = new Properties();
 
 	    //사내 메일 망일 경우 smtp host 만 설정해도 됨 (특정 포트가 아닐경우)
-	    prop.put("mail.smtp.host", host);
-	    prop.put("mail.smtp.port", port);
-	    prop.put("mail.smtp.starttls.enable","true");
-//	    prop.put("mail.smtp.auth", "true");	    
-//	    prop.put("mail.smtp.ssl.enable", "true");
-//	    prop.put("mail.smtp.ssl.trust", host);
+	    prop.put("mail.smtp.host", host);  	// host는 SMTP서버 ip이다. 이 ip주소는
+	    prop.put("mail.smtp.port", port);				//   NAT일 경우 내 localhost이고
+	    prop.put("mail.smtp.starttls.enable","true");	//   어댑터에 브릿지일경우는 해당 리눅스 ip주소다.
+//	    prop.put("mail.smtp.auth", "true");	    		// 따라서 NAT인경우 리눅스 게이트웨이를 RELAY하고
+//	    prop.put("mail.smtp.ssl.enable", "true");		// 어댑터브릿지인경우 내 localhost를 RELAY하면 된다.
+//	    prop.put("mail.smtp.ssl.trust", host);			//   그 이유는 NAT는 중간에 문이 하나 있지만 
+	    												//   어댑터 브릿지는 해당 리눅스ip로 바로 접근가능하니까
 
 	    Session session = Session.getDefaultInstance(prop, null);
 	    try{
