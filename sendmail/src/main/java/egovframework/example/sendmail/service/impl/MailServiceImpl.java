@@ -81,7 +81,7 @@ public class MailServiceImpl extends EgovAbstractServiceImpl implements MailServ
 //		vo.setId(id);
 //		LOGGER.debug(vo.toString());
 
-		mailDAO2.insertMail(vo);
+		mailDAO.insertMail(vo);
 		return vo.getIdx();
 	}
 
@@ -102,6 +102,16 @@ public class MailServiceImpl extends EgovAbstractServiceImpl implements MailServ
 	 * @return void형
 	 * @exception Exception
 	 */
+	@Override
+	public void deleteTmpMail(MailVO vo) throws Exception {
+		
+		// MailVO의 checkedIdxs에서 ','를 기준으로 체크된 idx값을 하나씩 빼내와서 VO의 idx에 넣어 sql 실행
+		String[] checkedIdxs = vo.getCheckedIdxs().split(",");
+		for (String s : checkedIdxs) {
+			vo.setIdx(s);
+			mailDAO.deleteTmpMail(vo);
+		}
+	}
 	@Override
 	public void deleteMail(MailVO vo) throws Exception {
 		mailDAO.deleteMail(vo);
@@ -141,9 +151,14 @@ public class MailServiceImpl extends EgovAbstractServiceImpl implements MailServ
 	
 	@Override
 	public List<?> selectOutboxList(MailVO vo) throws Exception {
-		return mailDAO2.selectOutboxList(vo);
+		return mailDAO.selectOutboxList(vo);
 	}
 
+	@Override
+	public List<?> selectDeleteList(MailVO vo) throws Exception {
+		return mailDAO.selectDeleteList(vo);
+	}
+	
 	/**
 	 * 글 총 갯수를 조회한다.
 	 * @param searchVO - 조회할 정보가 담긴 VO
@@ -159,6 +174,7 @@ public class MailServiceImpl extends EgovAbstractServiceImpl implements MailServ
 	public String selectLoginCheck(MailVO vo) {
 		return mailDAO.selectLoginCheck(vo);
 	}
+	
 	
 	
 

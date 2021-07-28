@@ -35,6 +35,7 @@
 		}
 		location.href = "<c:url value='/logout.do'/>";
 	}
+
 	</script>
 </head>
 	

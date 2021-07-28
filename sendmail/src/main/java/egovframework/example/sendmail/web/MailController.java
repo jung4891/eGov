@@ -24,7 +24,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import egovframework.example.sendmail.service.MailService;
@@ -109,17 +111,15 @@ public class MailController {
 	public String wholebox(@ModelAttribute("mailVO") MailVO mailVO, 
 							ModelMap model) throws Exception {
 		List<?> list = mailService.selectMailList(mailVO);
+		// System.out.println("전체메일함 조회시 가져오는 list: " + list);
 		model.addAttribute("resultList", list);
 		return "sendmail/wholebox";        
 	}
 	
 	@RequestMapping(value = "/inbox.do")
-	public String inbox(@ModelAttribute("mailVO") MailVO mailVO, 
-							@RequestParam("userName") String userName,
+	public String inbox(@ModelAttribute("mailVO") MailVO mailVO, 	
 							ModelMap model) throws Exception {
-//		userName = URLDecoder.decode(userName, "UTF-8");
-//		System.out.println("inbox.do에서 userName:" + userName);
-		System.out.println("aaaaa");
+		System.out.println("inbox()");
 		List<?> list = mailService.selectInboxList(mailVO);		// mailVO는 여기서 안쓰임 userName으로 조회됨
 		model.addAttribute("resultList", list);
 		return "sendmail/inbox";        
@@ -133,8 +133,75 @@ public class MailController {
 		return "sendmail/outbox";        
 	}
 	
+	@RequestMapping(value = "/deletePage.do")
+	public String deletePage(@ModelAttribute("mailVO") MailVO mailVO, 
+							 ModelMap model) throws Exception {
+		List<?> list = mailService.selectDeleteList(mailVO);
+		model.addAttribute("resultList", list);
+		return "sendmail/delete";        
+	}
+	
+	// 메일 우측에 삭제 a태그 넣어 클릭시 휴지통으로 임시 삭제
+	@RequestMapping(value = "/deleteTmp.do")
+	public String deleteTmp(
+			HttpServletRequest request,
+            RedirectAttributes redirectAttributes,
+			@ModelAttribute("mailVO") MailVO mailVO) throws Exception { 
+			// 요청이 /deleteTmp.do?idx=5 이런식으로 들어오는데 이게 참 신기하게 따로 설정 안하고
+		 	// 그냥 @MedelAttribute("mailVO")로 받아서 보내면 
+			// 값이 VO에 들어가서 SQL에서 파라미터로 적용이 되는거 같다.
+			// System.out.println("mailVO의 int값: " + mailVO.getIdx());
+		mailService.deleteTmpMail(mailVO);
+			
+		// 이전 페이지에 추가적인 데이터를 보낼때 사용
+	    // redirectAttributes.addFlashAttribute("okList", "AA BB CC");
+	    
+		// 이전페이지로 redirect하는건 request의 referer를 이용
+		String referer = request.getHeader("Referer");
+	    return "redirect:"+ referer;
+	}
+
+	// 체크박스 배열 받아와 휴지통으로 메일 임시 삭제
+	// , method = RequestMethod.POST  // 이놈을 붙이면 무조건 post로만 요청을 보내야한다. 
+									  // 근데 post방식으로 받으면 아니 RequestMethod~~ 를 뒤에 붙이게 되면 redirect가 제대로 작동을 안한다. 
+									  // select로 조회는 되는데 변경된 페이지가 로드가 안된다.... 
+	@RequestMapping(value = "/deleteTmp2.do")
+	public String deleteTmp2(
+			HttpServletRequest request,
+            RedirectAttributes redirectAttributes,
+            @ModelAttribute("mailVO") MailVO mailVO) throws Exception { 
+		
+		// 배열로 전달 받았을 경우
+		// @RequestParam(value = "valueArr[]") List<String> valueArr   
+		// System.out.println("List:" + valueArr);
+		
+		// VO로 전달 받았을 경우
+		// "체크한숫자, 체크한숫자" 이런식으로 문자열에 담겨서 VO의 checkedIdxs로 문자열 값이 들어감.
+		// System.out.println(mailVO.getCheckedIdxs());
+		
+		mailService.deleteTmpMail(mailVO);
+	    
+		String referer = request.getHeader("Referer");
+		//System.out.println(referer); // http://localhost/sendmail/outbox.do?userName=%EC%86%A1%ED%98%81%EC%A4%91
+		return "redirect:"+ referer;
+	}
+	
+	// 휴지통에서 완전삭제하기
+	@RequestMapping(value = "/delete.do")
+	public String delete(
+			HttpServletRequest request,
+            RedirectAttributes redirectAttributes,
+			@ModelAttribute("mailVO") MailVO mailVO) throws Exception { 
+		mailService.deleteMail(mailVO);
+		String referer = request.getHeader("Referer");
+	    return "redirect:"+ referer;
+	}
+	
 	@RequestMapping(value = "/writePage.do")
-	public String writePage() throws Exception {
+	public String writePage(HttpServletRequest request, ModelMap model) throws Exception {
+		String userId = request.getSession().getAttribute("userId").toString();
+		String senderAddr = userId + "@durianict.co.kr";
+		model.addAttribute("senderAddress", senderAddr);
 		return "sendmail/write";       
 	}
 	
@@ -147,7 +214,7 @@ public class MailController {
 			          	@RequestParam("contents") String contents, 
 						ModelMap model) throws Exception {
 		String userId = request.getSession().getAttribute("userId").toString();
-		String senderAddress = userId + "@test.com";
+		String senderAddress = userId + "@durianict.co.kr";
 		String userName = request.getSession().getAttribute("userName").toString();
 		
 		MailVO mailVO = new MailVO();

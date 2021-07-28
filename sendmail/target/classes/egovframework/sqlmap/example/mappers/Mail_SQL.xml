@@ -6,8 +6,7 @@
       Ctrl+F로 단어 변경시 경로는 제외해서 하기!!!!!!  sendmail을 mail로 하면 
       RuntimeException case :: RuntimeException 
 			Invalid bound statement (not found) 와 같은 애리가 남!!!!!!!!!!!!!
--->
-      
+-->      
 
 <!-- 
 			Class/TypeAlias 'MailVO' not found. -> config에 설정이 되어있지 않아서 생기는 오류
@@ -59,6 +58,14 @@
 
 	</update>
 
+	<update id="deleteTmpMail">
+
+			UPDATE tb_mail 
+				SET deleted='O' 
+			WHERE idx=#{idx}
+
+	</update>
+	
 	<delete id="deleteMail">
 
 			DELETE FROM tb_mail
@@ -88,7 +95,8 @@
 	<!-- select는 나중에 테이블이 추가될 수 있기에 Alias를 쓰면 좋다. -->
 	<!-- resultMap이나 resultType이나 아무거나 쓰면 된다. -->
 
-	<select id="selectMailList" parameterType="mailVO" resultType="egovMap">
+	<select id="selectMailList" resultType="egovMap">
+	<!-- parameterType="mailVO" 없어도 결과에 큰 지장 없는데.. 역할이 뭐지? -->
 
 			SELECT
 				A.idx
@@ -100,7 +108,9 @@
 			FROM 
 				tb_mail A 
 			WHERE 
-				A.receiver=#{userName} OR A.sender=#{userName} 
+				A.deleted IS null AND
+				( A.receiver=#{userName} OR A.sender=#{userName} ) 
+				
 
 	</select>
 	
@@ -115,7 +125,8 @@
 				, A.indate
 			FROM 
 				tb_mail A 
-			WHERE A.receiver=#{userName}
+			WHERE 
+				A.deleted IS null AND A.receiver=#{userName}
 
 	</select>
 	
@@ -130,9 +141,27 @@
 				, A.indate
 			FROM 
 				tb_mail A 
-			WHERE A.sender=#{userName}
+			WHERE 
+				A.deleted IS null AND A.sender=#{userName}
 	</select>
 
+	<select id="selectDeleteList" parameterType="mailVO" resultType="egovMap">
+
+			SELECT
+				A.idx
+				, A.title
+				, A.contents
+				, A.sender
+				, A.receiver
+				, A.indate
+			FROM 
+				tb_mail A 
+			WHERE 
+				A.deleted = 'O' AND 
+				( A.receiver=#{userName} OR A.sender=#{userName} )  
+
+	</select>
+	
 	<select id="selectMailListTotCnt" parameterType="mailVO" resultType="int">
 
 			SELECT COUNT(*) totcnt
@@ -160,4 +189,5 @@
 
 	</select>
 
+	
 </mapper>

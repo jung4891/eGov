@@ -43,7 +43,7 @@
           <span>스팸메일함</span></a>
       </li>            
       <li class="nav-item active">
-        <a class="nav-link" href="<c:url value='/main.do'/>">
+        <a class="nav-link" href="<c:url value='/deletePage.do?userName=${userName }'/>">
         <i class="fas fa-trash"></i>
           <span>휴지통</span></a>
       </li>      

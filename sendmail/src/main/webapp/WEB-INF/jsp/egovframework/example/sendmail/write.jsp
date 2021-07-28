@@ -62,6 +62,9 @@
 	              <div class="d-sm-flex align-items-center justify-content-between mb-4" >
 	                  <h1 class="h3 mb-0 text-gray-800">메일쓰기</h1>
 	              </div>
+	              <div>
+									보내는 사람 <input type="text" class="form-control" id="senderAddress" name="senderAddress" value="${senderAddress }" readonly="readonly" >
+								</div> <br>
 			  				<div>
 									받는 사람 <input type="text" class="form-control" id="receiverAddress" name="receiverAddress" placeholder="받는 사람">
 								</div> <br>

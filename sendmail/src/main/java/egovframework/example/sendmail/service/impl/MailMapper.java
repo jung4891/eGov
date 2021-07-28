@@ -60,6 +60,7 @@ public interface MailMapper {
 	 * @return void형
 	 * @exception Exception
 	 */
+	void deleteTmpMail(MailVO vo) throws Exception;
 	void deleteMail(MailVO vo) throws Exception;
 
 	/**
@@ -79,6 +80,7 @@ public interface MailMapper {
 	List<?> selectMailList(MailVO vo) throws Exception;
 	List<?> selectInboxList(MailVO vo) throws Exception;
 	List<?> selectOutboxList(MailVO vo) throws Exception;
+	List<?> selectDeleteList(MailVO vo) throws Exception;
 
 	/**
 	 * 글 총 갯수를 조회한다.
@@ -89,7 +91,6 @@ public interface MailMapper {
 	int selectMailListTotCnt(MailVO vo);
 	
 	String selectLoginCheck(MailVO vo);
-	
 	
 
 }

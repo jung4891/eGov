@@ -59,6 +59,7 @@ public interface MailService {
 	 * @return void형
 	 * @exception Exception
 	 */
+	void deleteTmpMail(MailVO vo) throws Exception;
 	void deleteMail(MailVO vo) throws Exception;
 
 	/**
@@ -81,6 +82,9 @@ public interface MailService {
 	
 	List<?> selectOutboxList(MailVO vo) throws Exception;
 	
+	List<?> selectDeleteList(MailVO vo) throws Exception;
+	
+	
 	/**
 	 * 글 총 갯수를 조회한다.
 	 * @param searchVO - 조회할 정보가 담긴 VO
@@ -90,5 +94,6 @@ public interface MailService {
 	int selectMailListTotCnt(MailVO vo);
 
 	String selectLoginCheck(MailVO vo);
+	
 
 }
