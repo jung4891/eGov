@@ -61,6 +61,7 @@ public interface MailService {
 	 */
 	void deleteTmpMail(MailVO vo) throws Exception;
 	void deleteMail(MailVO vo) throws Exception;
+	void restoreMail(MailVO mailVO) throws Exception;
 
 	/**
 	 * 글을 조회한다.
@@ -94,6 +95,8 @@ public interface MailService {
 	int selectMailListTotCnt(MailVO vo);
 
 	String selectLoginCheck(MailVO vo);
+
+	
 	
 
 }

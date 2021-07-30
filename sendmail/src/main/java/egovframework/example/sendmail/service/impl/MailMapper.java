@@ -62,7 +62,7 @@ public interface MailMapper {
 	 */
 	void deleteTmpMail(MailVO vo) throws Exception;
 	void deleteMail(MailVO vo) throws Exception;
-
+	void restoreMail(MailVO vo);
 	/**
 	 * 글을 조회한다.
 	 * @param vo - 조회할 정보가 담긴 MailVO
@@ -91,6 +91,8 @@ public interface MailMapper {
 	int selectMailListTotCnt(MailVO vo);
 	
 	String selectLoginCheck(MailVO vo);
+
+
 	
 
 }

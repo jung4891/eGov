@@ -197,6 +197,16 @@ public class MailController {
 	    return "redirect:"+ referer;
 	}
 	
+	// 휴지통에서 복원하기
+	@RequestMapping(value = "/restore.do")
+	public String restore(
+			HttpServletRequest request,
+			@ModelAttribute("mailVO") MailVO mailVO) throws Exception { 
+		mailService.restoreMail(mailVO);
+		String referer = request.getHeader("Referer");
+	    return "redirect:"+ referer;
+	}
+	
 	@RequestMapping(value = "/writePage.do")
 	public String writePage(HttpServletRequest request, ModelMap model) throws Exception {
 		String userId = request.getSession().getAttribute("userId").toString();
@@ -237,7 +247,17 @@ public class MailController {
 			out.flush();
 	    	return "sendmail/outbox";
 	    }
-	    
+	}
+	
+	@RequestMapping(value = "/write2.do")
+	public void write2(
+						HttpServletRequest request, HttpServletResponse response,
+						@RequestParam("receiverAddress") String receiverAddress,
+			          	@RequestParam("title") String title, 
+			          	@RequestParam("contents") String contents, 
+						ModelMap model) throws Exception {
+	    System.out.println("받는사람: " + receiverAddress);
+	    System.out.println("내용: " + contents);
 	}
 	
 	

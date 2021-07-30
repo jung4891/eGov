@@ -60,7 +60,7 @@
                           </tbody>
                         </table>
                       </div>
-                         <button class="btn btn-primary" onclick="deleteTmp();" style="margin: 0px 5px; 
+                         <button class="btn btn-primary" id="delBtn" disabled="disabled" onclick="deleteTmp();" style="margin: 0px 5px; 
                       				background-color: #96a8ba; border-color: white; font-weight: bold; font-size: small;">
                       				선택삭제</button>		
                     </div>

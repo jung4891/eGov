@@ -106,7 +106,7 @@ public class MailServiceImpl extends EgovAbstractServiceImpl implements MailServ
 	public void deleteTmpMail(MailVO vo) throws Exception {
 		
 		// MailVO의 checkedIdxs에서 ','를 기준으로 체크된 idx값을 하나씩 빼내와서 VO의 idx에 넣어 sql 실행
-		String[] checkedIdxs = vo.getCheckedIdxs().split(",");
+		String[] checkedIdxs = vo.getCheckedIdxs().split(",");  
 		for (String s : checkedIdxs) {
 			vo.setIdx(s);
 			mailDAO.deleteTmpMail(vo);
@@ -114,13 +114,19 @@ public class MailServiceImpl extends EgovAbstractServiceImpl implements MailServ
 	}
 	@Override
 	public void deleteMail(MailVO vo) throws Exception {
-		
 		String[] checkedIdxs = vo.getCheckedIdxs().split(",");
 		for (String s : checkedIdxs) {
 			vo.setIdx(s);
 			mailDAO.deleteMail(vo);
 		}
-		
+	}
+	@Override
+	public void restoreMail(MailVO vo) throws Exception { 
+		String[] checkedIdxs = vo.getCheckedIdxs().split(",");
+		for (String s : checkedIdxs) {
+			vo.setIdx(s);
+			mailDAO.restoreMail(vo);
+		}
 	}
 
 	/**

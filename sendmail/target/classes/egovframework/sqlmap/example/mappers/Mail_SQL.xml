@@ -67,11 +67,19 @@
 	</update>
 	
 	<delete id="deleteMail">
-
+	
 			DELETE FROM tb_mail
 			WHERE idx=#{idx}
-
+			
 	</delete>
+	
+	<update id="restoreMail">
+
+			UPDATE tb_mail 
+				SET deleted=NULL
+			WHERE idx=#{idx}
+
+	</update>
 
 	<select id="selectMail" resultMap="mail">
 

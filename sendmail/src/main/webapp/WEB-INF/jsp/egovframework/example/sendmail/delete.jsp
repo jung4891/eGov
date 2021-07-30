@@ -62,9 +62,12 @@
                           </tbody>
                         </table>
                       </div>
-                         <button class="btn btn-primary" onclick="deleteMail();" style="margin: 0px 5px; 
+                         <button class="btn btn-primary" id="delBtn" disabled="disabled" onclick="deleteMail();" style="margin: 0px 5px; 
                       				background-color: #96a8ba; border-color: white; font-weight: bold; font-size: small;">
-                      	   	  휴지통 비우기</button>		
+                      	   	  완전삭제</button>		
+                      	 <button class="btn btn-primary" id="delBtn2" disabled="disabled" onclick="restoreMail();" style="margin: 0px 5px; 
+                      				background-color: #96a8ba; border-color: white; font-weight: bold; font-size: small;">
+                      	   	  메일함으로 복원</button>		
                     </div>
                 </div>
             </div>
