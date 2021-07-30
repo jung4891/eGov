@@ -29,11 +29,79 @@
   <link href="<%=request.getContextPath()%>/css/bootstrap/css/sb-admin-2.min.css" rel="stylesheet">
 	<script src="<c:url value='/js/jquery-3.5.1.min.js'/>"></script>  
 	<script type="text/javascript" defer="defer" >
+	
 	function logout() {
 		if( !confirm("로그아웃 하시겠습니까?") ){
 			return;				
 		}
 		location.href = "<c:url value='/logout.do'/>";
+	}
+	
+	// 전체 체크 구현
+	function selectAll(s)  {
+		  const checkboxes = document.getElementsByName('select_each');	// 메일 체크박스들
+		  checkboxes.forEach((checkbox) => {
+			    checkbox.checked = s.checked;
+		  });
+	}
+
+	// 모든 메일 체크박스 체크시 상단체크박스 체크되게함
+	function selectEach()  {
+		
+		  const checkAll = document.getElementById('select_all');	// 전체 체크해주는 상단체크박스
+		  const checkboxes = document.getElementsByName('select_each');	// 메일 체크박스들
+		  
+		  let cntChecked = 0;									// 체크된 메일수
+		  checkboxes.forEach((checkbox) => {
+			    if(checkbox.checked) {
+			    	cntChecked = cntChecked + 1;
+			    };
+		  });
+		  
+		  if (cntChecked == checkboxes.length) {
+				checkAll.checked = true;
+		  } else {
+			  checkAll.checked = false;
+		  }
+		  // console.log(cntChecked);
+		  // console.log(checkAll.checked);
+	}
+
+	// 선택한 메일들 임시삭제 구현(VO의 checkedIdxs로 들어감)
+	function deleteTmp() {
+			// confirm("a");
+			
+	    var checkedIdxs = [];    							 // 배열 초기화
+	    $("input[name='select_each']:checked").each(function() {
+	    	checkedIdxs.push($(this).val());     // 체크된 것만 값을 뽑아서 배열에 push
+	    });
+	    
+	    document.location.href="<c:url value='/deleteTmp.do?checkedIdxs='/>" + checkedIdxs;		// document빼도 잘 작동함
+	 		// http://localhost/sendmail/deleteTmp.do?checkedIdxs=20,21
+	 				
+	 		
+	    // 배열로 전달함
+	/*     $.ajax({
+	        url: 'deleteTmp2.do'
+	        , type: 'post'
+	        , dataType: 'text'				// dataType과 data는 넘겨주는 값이 있는 경우에만 작성하면 됨.
+	        , data: {
+	        	valueArr: checkArr
+	        }
+	    }); 
+	*/
+	}
+	
+	// 휴지통에서 완전삭제
+	function deleteMail() {
+			
+	    var checkedIdxs = [];    							 
+	    $("input[name='select_each']:checked").each(function() {
+	    	checkedIdxs.push($(this).val());     
+	    });
+	    
+	    document.location.href="<c:url value='/delete.do?checkedIdxs='/>" + checkedIdxs;		
+
 	}
 
 	</script>

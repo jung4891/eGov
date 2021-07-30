@@ -40,28 +40,31 @@
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                           <thead>
                             <tr>
-                              <th>No</th>
+                              <th><input type="checkbox" id="select_all" onclick="selectAll(this)"></th>
                               <th>제목</th>
                               <th>보낸이</th>
                               <th>받는이</th>
                               <th>일자</th>
-                              <th></th>
+                              <!-- <th></th> -->
                             </tr>
                           </thead>
                           <tbody>
 														<c:forEach var="result" items="${resultList}" varStatus="status">
 															<tr>
-																<td><a href="javascript:view();"><c:out value="${result.idx}"/></a></td>
+																<td><input type="checkbox" name="select_each" onclick="selectEach()" value="${result.idx}"/></td>
 																<td><a href="javascript:view();"><c:out value="${result.title}"/></a></td>
 																<td><c:out value="${result.sender}"/></td>
 																<td><c:out value="${result.receiver}"/></td>
 																<td><c:out value="${result.indate}"/></td>
-																<td><a href="<c:url value='/delete.do?idx=${result.idx }'/>">완전삭제</a></td>
+																<%-- <td><a href="<c:url value='/delete.do?idx=${result.idx }'/>">완전삭제</a></td> --%>
 															</tr>
 														</c:forEach>                          
                           </tbody>
                         </table>
                       </div>
+                         <button class="btn btn-primary" onclick="deleteMail();" style="margin: 0px 5px; 
+                      				background-color: #96a8ba; border-color: white; font-weight: bold; font-size: small;">
+                      	   	  휴지통 비우기</button>		
                     </div>
                 </div>
             </div>

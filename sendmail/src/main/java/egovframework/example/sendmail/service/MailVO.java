@@ -47,10 +47,9 @@ public class MailVO extends SampleDefaultVO {
 	private String userId;  
 	private String password; 
 	private String userName;
+	
 	private String checkedIdxs;	// 체크박스 선택할때 담을 배열 (가령 idx가 2와 5인 메일을 체크했다면 "2,5" 이런식으로 문자열이 그냥 들어간다.)
-
 	private String dept;		// 추가 및 getter setter 아래 추가.
-
 
 
 	public String getCheckedIdxs() {

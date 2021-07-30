@@ -120,7 +120,7 @@ public class MailController {
 	public String inbox(@ModelAttribute("mailVO") MailVO mailVO, 	
 							ModelMap model) throws Exception {
 		System.out.println("inbox()");
-		List<?> list = mailService.selectInboxList(mailVO);		// mailVO는 여기서 안쓰임 userName으로 조회됨
+		List<?> list = mailService.selectInboxList(mailVO);		// mailVO의 userName으로 파라미터 전달됨
 		model.addAttribute("resultList", list);
 		return "sendmail/inbox";        
 	}
@@ -142,7 +142,7 @@ public class MailController {
 	}
 	
 	// 메일 우측에 삭제 a태그 넣어 클릭시 휴지통으로 임시 삭제
-	@RequestMapping(value = "/deleteTmp.do")
+/*	@RequestMapping(value = "/deleteTmp.do")
 	public String deleteTmp(
 			HttpServletRequest request,
             RedirectAttributes redirectAttributes,
@@ -159,14 +159,15 @@ public class MailController {
 		// 이전페이지로 redirect하는건 request의 referer를 이용
 		String referer = request.getHeader("Referer");
 	    return "redirect:"+ referer;
-	}
+	}*/
 
-	// 체크박스 배열 받아와 휴지통으로 메일 임시 삭제
+	
+	// VO의 checkedIdxs 값 받아와 휴지통으로 메일 임시 삭제
 	// , method = RequestMethod.POST  // 이놈을 붙이면 무조건 post로만 요청을 보내야한다. 
 									  // 근데 post방식으로 받으면 아니 RequestMethod~~ 를 뒤에 붙이게 되면 redirect가 제대로 작동을 안한다. 
 									  // select로 조회는 되는데 변경된 페이지가 로드가 안된다.... 
-	@RequestMapping(value = "/deleteTmp2.do")
-	public String deleteTmp2(
+	@RequestMapping(value = "/deleteTmp.do")
+	public String deleteTmp(
 			HttpServletRequest request,
             RedirectAttributes redirectAttributes,
             @ModelAttribute("mailVO") MailVO mailVO) throws Exception { 
@@ -178,7 +179,6 @@ public class MailController {
 		// VO로 전달 받았을 경우
 		// "체크한숫자, 체크한숫자" 이런식으로 문자열에 담겨서 VO의 checkedIdxs로 문자열 값이 들어감.
 		// System.out.println(mailVO.getCheckedIdxs());
-		
 		mailService.deleteTmpMail(mailVO);
 	    
 		String referer = request.getHeader("Referer");

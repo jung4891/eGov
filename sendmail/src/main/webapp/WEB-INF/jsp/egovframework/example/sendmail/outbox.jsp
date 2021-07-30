@@ -7,80 +7,6 @@
 <link href="<%=request.getContextPath()%>/css/bootstrap/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 
-	
-<script >
-
-// 전체 체크 구현
-function selectAll(s)  {
-	
-	  const checkboxes = document.getElementsByName('deleteTmp_chk');	// 메일 체크박스들
-	  checkboxes.forEach((checkbox) => {
-		    checkbox.checked = s.checked;
-	  });
-}
-
-// 모든 메일 체크박스 체크시 상단체크박스 체크되게함
-function selectEach()  {
-	
-	  const checkAll = document.getElementById('deleteTmp_chk_all');	// 전체 체크해주는 상단체크박스
-	  const checkboxes = document.getElementsByName('deleteTmp_chk');	// 메일 체크박스들
-	  
-	  let cntChecked = 0;									// 체크된 메일수
-	  checkboxes.forEach((checkbox) => {
-		    if(checkbox.checked) {
-		    	cntChecked = cntChecked + 1;
-		    };
-	  });
-	  
-	  if (cntChecked == checkboxes.length) {
-			checkAll.checked = true;
-	  } else {
-		  checkAll.checked = false;
-	  }
-	  // console.log(cntChecked);
-	  // console.log(checkAll.checked);
-}
-
-// 선택한 메일들 임시삭제 구현
-function deleteTmp() {
-		// confirm("a");
-		
-    var checkedIdxs = [];    							 // 배열 초기화
-    $("input[name='deleteTmp_chk']:checked").each(function() {
-    	checkedIdxs.push($(this).val());     // 체크된 것만 값을 뽑아서 배열에 push
-    });
-    
- 		// document.location.href = "/deleteTmp2.do?checkedIdxs=" + checkedIdxs; 
-    // http://localhost/deleteTmp2.do?checkedIdxs=20,21
-    		
-    // document.location.href = "<c:url value='/deleteTmp2.do?checkedIdxs='/>" + checkedIdxs; 
-    // http://localhost/sendmail/deleteTmp2.do?checkedIdxs=20,21
-    
-    // document.location.href = 'deleteTmp2.do?checkedIdxs=' + checkedIdxs;	
-    // http://localhost/sendmail/deleteTmp2.do?checkedIdxs=20,21
-    
-    document.location.href="<c:url value='/deleteTmp2.do?checkedIdxs='/>" + checkedIdxs;		// document빼도 잘 작동함
-
-    // VO로 전달함 (VO의 checkedIdxs로 들어감)
-/*      $.ajax({
-        url: 'deleteTmp2.do?checkedIdxs=' + checkedIdxs
-        , type: 'post'
-    });
-   
-   */  
-    // 배열로 전달함
-/*     $.ajax({
-        url: 'deleteTmp2.do'
-        , type: 'post'
-        , dataType: 'text'				// dataType과 data는 넘겨주는 값이 있는 경우에만 작성하면 됨.
-        , data: {
-        	valueArr: checkArr
-        }
-    }); 
-*/
-}
-</script>
-
 
 <body id="page-top">
 
@@ -116,22 +42,22 @@ function deleteTmp() {
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                           <thead>
                             <tr>                        
-                              <th><input type="checkbox" id="deleteTmp_chk_all" onclick="selectAll(this)"></th>		<!-- 클릭시 전체선택 체크박스 구현 -->
+                              <th><input type="checkbox" id="select_all" onclick="selectAll(this)"></th>		<!-- 클릭시 전체선택 체크박스 구현 -->
                               <th>제목</th>
                               <th>받는이</th>
                               <th>일자</th>
-                              <th></th>
+                              <!-- <th></th> --> 
                             </tr>
                           </thead>
                           <tbody>
                           
 														<c:forEach var="result" items="${resultList}" varStatus="status">
 															<tr>
-																<td><input type="checkbox" name="deleteTmp_chk" onclick="selectEach()" value="${result.idx}"/></td>
+																<td><input type="checkbox" name="select_each" onclick="selectEach()" value="${result.idx}"/></td>
 																<td><a href="javascript:view();"><c:out value="${result.title}"/></a></td>
 																<td><c:out value="${result.receiver}"/></td>
 																<td><c:out value="${result.indate}"/></td>
-																<td><a href="<c:url value='/deleteTmp.do?idx=${result.idx }'/>">삭제</a></td>
+																<%-- <td><a href="<c:url value='/deleteTmp.do?idx=${result.idx }'/>">삭제</a></td> --%>
 																
 															</tr>
 														</c:forEach>                             
@@ -148,8 +74,9 @@ function deleteTmp() {
                         </table>
                         						 				
                       </div>
-                      <button class="btn btn-primary" style="margin: 0px 5px; background-color: blue; border-color: white;" 
-                              onclick="deleteTmp();">선택삭제</button>		
+                      <button class="btn btn-primary" onclick="deleteTmp();" style="margin: 0px 5px; 
+                      				background-color: #96a8ba; border-color: white; font-weight: bold; font-size: small;">
+                      				선택삭제</button>		
                     </div>
                 </div>
             </div>
@@ -169,7 +96,6 @@ function deleteTmp() {
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
 
     <!-- Bootstrap core JavaScript-->
     <script src="<%=request.getContextPath()%>/css/bootstrap/vendor/jquery/jquery.min.js"></script>

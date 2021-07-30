@@ -114,7 +114,13 @@ public class MailServiceImpl extends EgovAbstractServiceImpl implements MailServ
 	}
 	@Override
 	public void deleteMail(MailVO vo) throws Exception {
-		mailDAO.deleteMail(vo);
+		
+		String[] checkedIdxs = vo.getCheckedIdxs().split(",");
+		for (String s : checkedIdxs) {
+			vo.setIdx(s);
+			mailDAO.deleteMail(vo);
+		}
+		
 	}
 
 	/**
