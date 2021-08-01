@@ -1,11 +1,14 @@
-<%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 
+<!-- 아래 설정은 주석해도 별 문제 없음. 하지만 main.jsp에 아래 설정을 따로 안적으면 한글이 깨진다. 
+		  즉, header.jsp에 적어두는건 적용이 안되는것 같다.  --> 
+<%-- <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%> --%>  
+
+<!-- jstl을 쓰기위해서 넣어준다. 아래 설정 주석시 뭔가 웹페이지 모양이 이상해진다. 적용이 된다는 것. 
+          하지만  taglib의 경우 웹페이지 f12의 Elements에서 보이진 않는다.  -->
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> 
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<!-- jstl을 쓰기위해서 넣어줌 -->
-
 
 <!DOCTYPE html>
 <html lang="en"> 

@@ -1,9 +1,11 @@
-<%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-<!-- 윗 부분 넣어줘야 한글 안깨짐 --> 
+<%@ page contentType="text/html; charset=utf-8" %>
+<!-- charset=utf-8를 지우면 백색창이 뜬다. 그러다가 다시 잘 띄어지기도 한다.  -->
+<!-- pageEncoding="utf-8" 지워도 우선 애러는 안나서 일단 지움. -->
+<!-- 윗 부분 넣어줘야 한글 안깨짐. 설정 안할시 '메인페이지' -> 'ë©ì¸íì´ì§'이렇게 뜸  --> 
 
 <%@ include file ="../sendmail/layout/header.jsp" %> 
 
-<title>두리안 메일서버 메인</title>
+<title>두리안 메일서버 메인</title>		<!-- 이 위치에 있긴하지만 <head>로 자동 들어감 -->
 
 <body id="page-top">
 

@@ -40,31 +40,25 @@ import egovframework.rte.fdl.property.EgovPropertyService;
 */
 
 @Controller  
-public class MailController {
+public class MailController { 
+	
+	/** EgovPropertyService */
+	@Resource(name = "propertiesService")
+	protected EgovPropertyService propertiesService;
+	// PropertyService는 resources > spring의 여러 .xml파일들의 값들을 가지고 올 수 있게 한다. (근데 언제 쓰이지?)
 	
 	/** MailService */
 	@Resource(name = "mailService")
 	private MailService mailService;
 	
-	/** EgovPropertyService */
-	@Resource(name = "propertiesService")
-	protected EgovPropertyService propertiesService;
-	// PropertyService는 resources > spring의 여러 .xml파일들의 값들을 가지고 올 수 있게 한다.
-	
 	@RequestMapping(value = "/main.do")
-	public String main(ModelMap model) throws Exception {
-//		System.out.println("sendmail의 main 호출");
+	public String main() throws Exception {
 		return "sendmail/main"; 
 	}
 	
 	@RequestMapping(value = "/loginPage.do")
-	public String loginPage(ModelMap model) throws Exception {
-//		System.out.println("sendmail의 login 호출");  
-	    InetAddress inetAddress = InetAddress.getLocalHost();
-	    String hostName = inetAddress.getHostName();
-	    String host = inetAddress.getHostAddress();
-	    System.out.println("hostAddress: " + host);
-	    System.out.println("hostName: " + hostName);
+	public String loginPage() throws Exception {
+
 		return "sendmail/login";        
 	}
 
@@ -264,20 +258,22 @@ public class MailController {
 	// 메일쓰기
 	final static String port = "25";
 	
-	public static void connectSMTP() throws UnknownHostException{
+	public static void connectSMTP() throws UnknownHostException {
 	    InetAddress inetAddress = InetAddress.getLocalHost();
-	    String host = inetAddress.getHostAddress();
-	    System.out.println("ipAddress: " + host);
+	    String hostName = inetAddress.getHostName();
+	    String hostAddress = inetAddress.getHostAddress();
+	    System.out.println("hostName: " + hostName);			// DESKTOP-L1EANON
+	    System.out.println("hostAddress: " + hostAddress);		// 218.152.63.87
 	    Properties prop = new Properties();
 
 	    //사내 메일 망일 경우 smtp host 만 설정해도 됨 (특정 포트가 아닐경우)
-	    prop.put("mail.smtp.host", host);  	// host는 SMTP서버 ip이다. 이 ip주소는
-	    prop.put("mail.smtp.port", port);				//   NAT일 경우 내 localhost이고
-	    prop.put("mail.smtp.starttls.enable","true");	//   어댑터에 브릿지일경우는 해당 리눅스 ip주소다.
-//	    prop.put("mail.smtp.auth", "true");	    		// 따라서 NAT인경우 리눅스 게이트웨이를 RELAY하고
-//	    prop.put("mail.smtp.ssl.enable", "true");		// 어댑터브릿지인경우 내 localhost를 RELAY하면 된다.
-//	    prop.put("mail.smtp.ssl.trust", host);			//   그 이유는 NAT는 중간에 문이 하나 있지만 
-	    												//   어댑터 브릿지는 해당 리눅스ip로 바로 접근가능하니까
+	    prop.put("mail.smtp.host", hostAddress);  		// host는 SMTP서버 ip이다. 이 ip주소는 NAT일 경우 내 localhost이고 어댑터에 브릿지일경우는 해당 리눅스 ip주소다.
+	    prop.put("mail.smtp.port", port);				// RELAY(중계허용)은 NAT인경우 리눅스 게이트웨이를 어댑터브릿지인경우 내 localhost를 RELAY하면 된다.
+	    prop.put("mail.smtp.starttls.enable","true");	// 그 이유는 NAT는 중간에 문이 하나 있지만 어댑터 브릿지는 해당 리눅스ip로 바로 접근가능하니까!
+//	    prop.put("mail.smtp.auth", "true");	    		// 요거 쓰는것도 한번 연습해봐야 할듯.
+//	    prop.put("mail.smtp.ssl.enable", "true");		 
+//	    prop.put("mail.smtp.ssl.trust", host);			    
+	    												   
 
 	    Session session = Session.getDefaultInstance(prop, null);
 	    try{
