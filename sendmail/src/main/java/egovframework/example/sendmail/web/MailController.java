@@ -14,7 +14,6 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 import javax.servlet.http.HttpServletRequest;
@@ -24,20 +23,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import egovframework.example.sendmail.service.MailService;
 import egovframework.example.sendmail.service.MailVO;
 import egovframework.rte.fdl.property.EgovPropertyService;
-
-/*
-< 컨트롤러 수정해도 서버에서 자동 빌드가 안되고 웹페이지는 Not Found 뜰떄... >
-	프로젝트 우클릭 > 빌드Path > missing인 부분 remove(이번엔 test 폴더를 지웠는데 여기에 빌드path가 잡혀 있어서 안됬던거임)
-	잘 안될때 결과창 아래에 Problems 꼭 보기!!!
-*/
 
 @Controller  
 public class MailController { 
@@ -45,7 +36,8 @@ public class MailController {
 	/** EgovPropertyService */
 	@Resource(name = "propertiesService")
 	protected EgovPropertyService propertiesService;
-	// PropertyService는 resources > spring의 여러 .xml파일들의 값들을 가지고 올 수 있게 한다. (근데 언제 쓰이지?)
+	// PropertyService는 resources > spring의 여러 .xml파일들의 값들을 가지고 올 수 있게 한다. 
+	// (근데 언제 쓰이지?)
 	
 	/** MailService */
 	@Resource(name = "mailService")
@@ -58,7 +50,6 @@ public class MailController {
 	
 	@RequestMapping(value = "/loginPage.do")
 	public String loginPage() throws Exception {
-
 		return "sendmail/login";        
 	}
 
@@ -107,7 +98,7 @@ public class MailController {
 		List<?> list = mailService.selectMailList(mailVO);
 		// System.out.println("전체메일함 조회시 가져오는 list: " + list);
 		model.addAttribute("resultList", list);
-		return "sendmail/wholebox";        
+		return "sendmail/mailbox/wholebox";        
 	}
 	
 	@RequestMapping(value = "/inbox.do")
@@ -116,7 +107,7 @@ public class MailController {
 		System.out.println("inbox()");
 		List<?> list = mailService.selectInboxList(mailVO);		// mailVO의 userName으로 파라미터 전달됨
 		model.addAttribute("resultList", list);
-		return "sendmail/inbox";        
+		return "sendmail/mailbox/inbox";        
 	}
 	
 	@RequestMapping(value = "/outbox.do")
@@ -124,7 +115,18 @@ public class MailController {
 							ModelMap model) throws Exception {
 		List<?> list = mailService.selectOutboxList(mailVO);
 		model.addAttribute("resultList", list);
-		return "sendmail/outbox";        
+		return "sendmail/mailbox/outbox";        
+	}
+	
+	@RequestMapping(value = "/detailPage.do")
+	public String detailPage(@ModelAttribute("mailVO") MailVO vo, ModelMap model) throws Exception {
+		MailVO mailVO = mailService.selectMail(vo);
+		model.addAttribute("title", mailVO.getTitle());
+		model.addAttribute("contents", mailVO.getContents());
+		model.addAttribute("sender", mailVO.getSender());
+		model.addAttribute("receiver", mailVO.getReceiver());
+		model.addAttribute("indate", mailVO.getIndate());
+		return "sendmail/mailbox/detail";        
 	}
 	
 	@RequestMapping(value = "/deletePage.do")
@@ -132,7 +134,7 @@ public class MailController {
 							 ModelMap model) throws Exception {
 		List<?> list = mailService.selectDeleteList(mailVO);
 		model.addAttribute("resultList", list);
-		return "sendmail/delete";        
+		return "sendmail/mailbox/delete";        
 	}
 	
 	// 메일 우측에 삭제 a태그 넣어 클릭시 휴지통으로 임시 삭제
@@ -202,7 +204,12 @@ public class MailController {
 	}
 	
 	@RequestMapping(value = "/writePage.do")
-	public String writePage(HttpServletRequest request, ModelMap model) throws Exception {
+	public String writePage(HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception {
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.println("<script>alert('왜 안뜸???'); </script>");
+		System.out.println("123");
+		
 		String userId = request.getSession().getAttribute("userId").toString();
 		String senderAddr = userId + "@durianict.co.kr";
 		model.addAttribute("senderAddress", senderAddr);
@@ -218,7 +225,7 @@ public class MailController {
 			          	@RequestParam("contents") String contents, 
 						ModelMap model) throws Exception {
 		String userId = request.getSession().getAttribute("userId").toString();
-		String senderAddress = userId + "@durianict.co.kr";
+		String senderAddress = userId + "@test.com";
 		String userName = request.getSession().getAttribute("userName").toString();
 		
 		MailVO mailVO = new MailVO();
@@ -228,52 +235,45 @@ public class MailController {
 		mailVO.setReceiver(receiverAddress);
 	    connectSMTP();
 	    createMail(senderAddress, receiverAddress, title, contents);
-	    
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
+		out.println("<script>alert('왜 안뜨나?'); </script>");
 	    if (sendMail()) {
 	    	mailService.insertMail(mailVO);
 			out.println("<script>alert('메일 발송 성공!'); </script>");
 			out.flush();
-			return "sendmail/outbox";
+			userName = URLEncoder.encode(userName, "UTF-8");	// ★ 한글을 파라미터로 보낼시 ??? 인코딩 애러처리
+			return "sendmail/main";  							// redirect 불가능. -> (Error) 응답이 이미 커밋된 후에는, sendRedirect()를 호출할 수 없습니다.
 	    } else {
 	    	out.println("<script>alert('메일 발송 실패..'); </script>");
 			out.flush();
-	    	return "sendmail/outbox";
+	    	return "sendmail/main";
 	    }
-	}
-	
-	@RequestMapping(value = "/write2.do")
-	public void write2(
-						HttpServletRequest request, HttpServletResponse response,
-						@RequestParam("receiverAddress") String receiverAddress,
-			          	@RequestParam("title") String title, 
-			          	@RequestParam("contents") String contents, 
-						ModelMap model) throws Exception {
-	    System.out.println("받는사람: " + receiverAddress);
-	    System.out.println("내용: " + contents);
 	}
 	
 	
 	// 메일쓰기
+	public static Message message = null;
 	final static String port = "25";
+//	public static JavaMailSender  mailSender;
 	
 	public static void connectSMTP() throws UnknownHostException {
+		
 	    InetAddress inetAddress = InetAddress.getLocalHost();
 	    String hostName = inetAddress.getHostName();
 	    String hostAddress = inetAddress.getHostAddress();
 	    System.out.println("hostName: " + hostName);			// DESKTOP-L1EANON
 	    System.out.println("hostAddress: " + hostAddress);		// 218.152.63.87
 	    Properties prop = new Properties();
-
-	    //사내 메일 망일 경우 smtp host 만 설정해도 됨 (특정 포트가 아닐경우)
+	    
+	    
+	    //사내 메일 망일 경우 smtp host 만 설정해도 됨 (특정 포트가 아닐경우)	// "183.96.110.159"
 	    prop.put("mail.smtp.host", hostAddress);  		// host는 SMTP서버 ip이다. 이 ip주소는 NAT일 경우 내 localhost이고 어댑터에 브릿지일경우는 해당 리눅스 ip주소다.
 	    prop.put("mail.smtp.port", port);				// RELAY(중계허용)은 NAT인경우 리눅스 게이트웨이를 어댑터브릿지인경우 내 localhost를 RELAY하면 된다.
 	    prop.put("mail.smtp.starttls.enable","true");	// 그 이유는 NAT는 중간에 문이 하나 있지만 어댑터 브릿지는 해당 리눅스ip로 바로 접근가능하니까!
 //	    prop.put("mail.smtp.auth", "true");	    		// 요거 쓰는것도 한번 연습해봐야 할듯.
 //	    prop.put("mail.smtp.ssl.enable", "true");		 
-//	    prop.put("mail.smtp.ssl.trust", host);			    
-	    												   
+//	    prop.put("mail.smtp.ssl.trust", host);			    	    												   
 
 	    Session session = Session.getDefaultInstance(prop, null);
 	    try{
@@ -283,30 +283,32 @@ public class MailController {
 	    }
 	}
 	
-	public static Message message = null;
-	
 	public static void createMail(String senderAddress, String receiverAddress, String title, String contents){
 	   
-	    MimeBodyPart mbp = new MimeBodyPart();
+	    // MimeBodyPart mbp = new MimeBodyPart();   // 안써서 주석처리
 
 	    try{
 	    	
-		     // 보내는 메일 주소
-		     message.setFrom(new InternetAddress(senderAddress));
-		     
-		     // 받는 사람 메일주소
-		     InternetAddress[] receive_address = {new InternetAddress(receiverAddress)};
-		     message.setRecipients(RecipientType.TO, receive_address);
-
-		     // 메일 제목 넣기
-		     message.setSubject(title);
-		     
-		     // 메일 본문을 넣기
-		     message.setContent(contents, "text/html;charset=utf-8"); // charset 안넣으면 ????로 내용 전달됨.
-
-		     // 보내는 날짜
-		     message.setSentDate(new Date());
-		     
+	    	message.setFrom(new InternetAddress(senderAddress));		// 보내는 메일 주소
+		    InternetAddress[] receive_address = {new InternetAddress(receiverAddress)};	// 받는 사람 메일주소
+		    message.setRecipients(RecipientType.TO, receive_address);		   
+		    message.setSubject(title);				// 메일 제목 넣기		    		   
+		    message.setSentDate(new Date());		// 보내는 날짜
+		    message.setContent(contents, "text/html; charset=utf-8"); 	// 메일 본문 넣기, charset 안넣으면 ????로 내용 전달됨.
+		    System.out.println("contents: " + contents);
+	    		    		    	
+/*	    	
+	    	내용이 html형식인 경우 적용해서 보내기. <p><strong>test</strong></p> -> test(굵게)
+	    	MimeMessage mimeMessage = mailSender.createMimeMessage();
+	    	
+	    	MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "utf-8");
+	    	helper.setText(contents, true);	//***HTML 적용
+	    	helper.setTo(receiverAddress);
+	    	helper.setSubject(title);
+	    	helper.setFrom(senderAddress);
+	    	mailSender.send(mimeMessage);
+*/
+   
 	   } catch (Exception e){
 		    	e.printStackTrace();
 	   }

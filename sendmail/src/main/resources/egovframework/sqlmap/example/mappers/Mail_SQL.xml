@@ -81,23 +81,18 @@
 
 	</update>
 
-	<select id="selectMail" resultMap="mail">
+	<select id="selectMail" resultType="MailVO">		<!-- 결과값 존재시 resultType이나 resultMaps는 반드시 있어야 한다. -->
 
 			SELECT
-				A.idx
-				, A.title
+				A.title
 				, A.contents
-				, IFNULL(A.count, 0) as count <!-- mariaDB IFNULL은  oracle의 NVL임~~ -->
-				, A.writer
+				, A.sender
+				, A.receiver
 				, A.indate
-				, B.user_name as writerNm
-			FROM 
+			FROM
 				tb_mail A 
-			LEFT JOIN 
-				tb_user B
-			ON
-				A.writer = B.user_id 
-			WHERE A.idx=#{idx}
+			WHERE 
+				A.idx=#{idx }
 
 	</select>
 	<!-- select는 나중에 테이블이 추가될 수 있기에 Alias를 쓰면 좋다. -->

@@ -1,7 +1,12 @@
 
-<!-- 아래 설정은 주석해도 별 문제 없음. 하지만 main.jsp에 아래 설정을 따로 안적으면 한글이 깨진다. 
-		  즉, header.jsp에 적어두는건 적용이 안되는것 같다.  --> 
-<%-- <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%> --%>  
+<!-- 
+	text/html을 지우면 생기는 애러 : 다른 값들을 가지는 'contentType'이 여러 번 나타나는 것은 불허됩니다. (이전 값: [text/html; charset=utf-8], 신규 값: [charset=utf-8])]을(를) 발생시켰습니다
+	 (+ "text/html;charset=utf-8" 요렇게 붙여쓰면 애러가 -> 신규 값: [text/html;charset=utf-8]~ 로 난다.)
+	 (+ charset=utf-8을 지우면 애러가 -> 신규 값: [text/html]~~ 로 난다.)
+	그냥 아얘 아래 JSP태그를 지우면 '로그아웃 하시겠습니까?'라는 알림창 한글이 깨진다. 즉, 아래 태그는 jsp에서 이벤트창으로 아래 logout()과 같은 함수 호출시 UTF-8을 적용시키는 것 같다.
+	pageEncoding="utf-8" 지워도 우선 애러는 안나서 일단 지움. 
+	--> 
+<%@ page contentType="text/html; charset=utf-8" %>   
 
 <!-- jstl을 쓰기위해서 넣어준다. 아래 설정 주석시 뭔가 웹페이지 모양이 이상해진다. 적용이 된다는 것. 
           하지만  taglib의 경우 웹페이지 f12의 Elements에서 보이진 않는다.  -->
@@ -32,7 +37,7 @@
   <link href="<%=request.getContextPath()%>/css/bootstrap/css/sb-admin-2.min.css" rel="stylesheet">
 	<script src="<c:url value='/js/jquery-3.5.1.min.js'/>"></script>  
 	<script type="text/javascript" defer="defer" >
-	
+	 
 	function logout() {
 		if( !confirm("로그아웃 하시겠습니까?") ){
 			return;				

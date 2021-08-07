@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <!-- 윗 부분 넣어줘야 한글 안깨짐 --> 
-<%@ include file ="../sendmail/layout/header.jsp" %>
+<%@ include file ="../../sendmail/layout/header.jsp" %>
 
 <title>보낸메일함</title>
 <!-- Custom styles for this page -->
@@ -14,7 +14,7 @@
     <div id="wrapper">
 
 			<!-- 사이드바-->
-			<%@ include file ="../sendmail/layout/sidebar.jsp" %>
+			<%@ include file ="../../sendmail/layout/sidebar.jsp" %>
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -54,7 +54,7 @@
 														<c:forEach var="result" items="${resultList}" varStatus="status">
 															<tr>
 																<td><input type="checkbox" name="select_each" onclick="selectEach()" value="${result.idx}"/></td>
-																<td><a href="javascript:view();"><c:out value="${result.title}"/></a></td>
+																<td><a href="<c:url value='/detailPage.do?idx=${result.idx}'/>"><c:out value="${result.title}"/></a></td>
 																<td><c:out value="${result.receiver}"/></td>
 																<td><c:out value="${result.indate}"/></td>
 																<%-- <td><a href="<c:url value='/deleteTmp.do?idx=${result.idx }'/>">삭제</a></td> --%>
@@ -84,7 +84,7 @@
           </div>
           <!-- End of Main Content -->
 
-						<%@ include file ="../sendmail/layout/footer.jsp" %>
+						<%@ include file ="../../sendmail/layout/footer.jsp" %>
 
         </div>
         <!-- End of Content Wrapper -->

@@ -70,9 +70,9 @@
   <!-- Page level plugins -->
   <script src="<%=request.getContextPath()%>/css/bootstrap/vendor/chart.js/Chart.min.js"></script>
 
-  <!-- Page level custom scripts -->
+<%--   <!-- Page level custom scripts -->
   <script src="<%=request.getContextPath()%>/css/bootstrap/js/demo/chart-area-demo.js"></script>
-  <script src="<%=request.getContextPath()%>/css/bootstrap/js/demo/chart-pie-demo.js"></script>
+  <script src="<%=request.getContextPath()%>/css/bootstrap/js/demo/chart-pie-demo.js"></script> --%>
 
 </body>
 

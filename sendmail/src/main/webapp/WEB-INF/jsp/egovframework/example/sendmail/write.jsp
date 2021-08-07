@@ -8,13 +8,20 @@
 <!-- 아래는 Document 버전으로 플러그인이 더 괜찮은거 같은데 textarea가 아닌 p태그 안에서만 적용이 되서 일단 보류..(form으로 묶어서 post보내야 되는데 p태그는 그게 안됨) -->
 <!-- <script src="https://cdn.ckeditor.com/ckeditor5/29.0.0/decoupled-document/ckeditor.js"></script> -->
 
- <script type="text/javaScript" language="javascript" defer="defer">
-	    
+ <script type="text/javaScript"  defer="defer">
+ 
+/* 크롬 쿠키관련 애러 Indicate whether~~ 처리중..
+ document.cookie = "safeCookie1=foo; SameSite=Lax"; 
+ document.cookie = "safeCookie2=foo"; 
+ document.cookie = "crossCookie=bar; SameSite=None; Secure";
+ */
+ 
  	function send(){
 	    	const element = document.getElementsByClassName('ck-content');		// 글쓰기 에디터 적용한 '내용' 부분 가져오기
-	    	console.log(element[0].innerText);	// 내용만 가져옴									// 클래스로 가져올경우 해당 클래스명을 가진 요소 목록의 HTMLCollection을 가지고 와서
-	    	console.log(element[0].innerHTML);	// HTML요소까지 몽땅 가져옴				// element[0]으로 할경우 해당 내용 가져올 수 있게된다. id는 없으므로 부득이하게 class로..	
-	    	
+	    	console.log(element[0].innerText);	// 내용만 가져옴										// 클래스로 가져올경우 해당 클래스명을 가진 요소 목록의 HTMLCollection을 가지고 와서
+	    																			// test											 	// element[0]으로 할경우 해당 내용 가져올 수 있게된다. id는 없으므로 부득이하게 class로..	
+	    	console.log(element[0].innerHTML);	// HTML요소까지 몽땅 가져옴				
+	    																			// <p><strong>test</strong></p>	
 	    	if( $("#receiverAddress").val()==''){
 	    		alert("받는 사람을 입력해주세요.");
             	$("#receiver").focus();
@@ -40,14 +47,14 @@
 	    	// document.boardRegForm.submit();			// 기존 form안에 내용도 포함되었을 경우
 	    	
 	    	$.ajax({										// 내용의 경우는 에디터를 사용하므로 form안에 포함이 안되어 submit이 사용이 안됨.
-	        url: 'write2.do'
+	        url: 'write.do'
 	        , type: 'post'
 	        , dataType: 'text'				// dataType과 data는 넘겨주는 값이 있는 경우에만 작성하면 됨.
 	        , data: {
 	        	senderAddress: $("#senderAddress").val(),
 	        	receiverAddress: $("#receiverAddress").val(),
 	        	title: $("#title").val(),
-	        	contents: element[0].innerHTML
+	        	contents: element[0].innerHTML  // 컨트롤러에서 contents 값: &lt;p&gt;&lt;strong&gt;test&lt;/strong&gt;&lt;/p&gt;
 	        }
 	    	})
  	}
@@ -90,9 +97,6 @@
 	              <div>
 									보내는 사람 <input type="text" class="form-control" id="senderAddress" name="senderAddress" value="${senderAddress }" readonly="readonly" >
 								</div> <br>
-								<div class="test" id="test" type="text">
-									testtt
-								</div>
 			  				<div>
 									받는 사람 <input type="text" class="form-control" id="receiverAddress" name="receiverAddress" placeholder="받는 사람">
 								</div> <br>
