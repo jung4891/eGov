@@ -36,6 +36,7 @@
   <!-- Custom styles for this template-->
   <link href="<%=request.getContextPath()%>/css/bootstrap/css/sb-admin-2.min.css" rel="stylesheet">
 	<script src="<c:url value='/js/jquery-3.5.1.min.js'/>"></script>  
+	
 	<script type="text/javascript" defer="defer" >
 	 
 	function logout() {

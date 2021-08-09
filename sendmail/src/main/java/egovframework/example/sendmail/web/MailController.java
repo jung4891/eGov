@@ -19,11 +19,14 @@ import javax.mail.internet.MimeMessage.RecipientType;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import egovframework.example.sendmail.service.MailService;
@@ -205,21 +208,26 @@ public class MailController {
 	
 	@RequestMapping(value = "/writePage.do")
 	public String writePage(HttpServletRequest request, HttpServletResponse response, ModelMap model) throws Exception {
-		response.setContentType("text/html; charset=UTF-8");
+/*		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		out.println("<script>alert('왜 안뜸???'); </script>");
-		System.out.println("123");
-		
+		out.flush();*/
 		String userId = request.getSession().getAttribute("userId").toString();
 		String senderAddr = userId + "@durianict.co.kr";
 		model.addAttribute("senderAddress", senderAddr);
 		return "sendmail/write";       
 	}
+	@ResponseBody 
+	@RequestMapping(value = "/write2.do", method = RequestMethod.POST)
+	public String write2() throws Exception {
+		System.out.println("bbb22");
+		return "sendmail/main";
+	}
 	
-	
-	@RequestMapping(value = "/write.do")
-	public String write(
-						HttpServletRequest request, HttpServletResponse response,
+	// 현재 ajax로 사용해서 return이 안되고 스크립트 alert도 안되는 문제가 생김. 해결중...
+	@ResponseBody	
+	@RequestMapping(value = "/write.do", method = RequestMethod.POST)
+	public String write(HttpServletRequest request, HttpServletResponse response,
 						@RequestParam("receiverAddress") String receiverAddress,
 			          	@RequestParam("title") String title, 
 			          	@RequestParam("contents") String contents, 
@@ -237,13 +245,12 @@ public class MailController {
 	    createMail(senderAddress, receiverAddress, title, contents);
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
-		out.println("<script>alert('왜 안뜨나?'); </script>");
+
 	    if (sendMail()) {
-	    	mailService.insertMail(mailVO);
+	    	mailService.insertMail(mailVO);							// 전송성공한 메일은 메일함으로 이동
 			out.println("<script>alert('메일 발송 성공!'); </script>");
-			out.flush();
-			userName = URLEncoder.encode(userName, "UTF-8");	// ★ 한글을 파라미터로 보낼시 ??? 인코딩 애러처리
-			return "sendmail/main";  							// redirect 불가능. -> (Error) 응답이 이미 커밋된 후에는, sendRedirect()를 호출할 수 없습니다.
+			out.flush();											// flush 안해주면 위 이벤트창 작동 안함
+			return "sendmail/main";  								// redirect 불가능. -> (Error) 응답이 이미 커밋된 후에는, sendRedirect()를 호출할 수 없습니다.
 	    } else {
 	    	out.println("<script>alert('메일 발송 실패..'); </script>");
 			out.flush();
@@ -288,27 +295,23 @@ public class MailController {
 	    // MimeBodyPart mbp = new MimeBodyPart();   // 안써서 주석처리
 
 	    try{
-	    	
-	    	message.setFrom(new InternetAddress(senderAddress));		// 보내는 메일 주소
-		    InternetAddress[] receive_address = {new InternetAddress(receiverAddress)};	// 받는 사람 메일주소
+
+	    	message.setFrom(new InternetAddress(senderAddress));						// 보내는 메일 주소
+		    InternetAddress[] receive_address = {new InternetAddress(receiverAddress), new InternetAddress("go_go_ssing@naver.com")};	// 받는 사람 메일주소
 		    message.setRecipients(RecipientType.TO, receive_address);		   
-		    message.setSubject(title);				// 메일 제목 넣기		    		   
-		    message.setSentDate(new Date());		// 보내는 날짜
-		    message.setContent(contents, "text/html; charset=utf-8"); 	// 메일 본문 넣기, charset 안넣으면 ????로 내용 전달됨.
-		    System.out.println("contents: " + contents);
-	    		    		    	
-/*	    	
-	    	내용이 html형식인 경우 적용해서 보내기. <p><strong>test</strong></p> -> test(굵게)
-	    	MimeMessage mimeMessage = mailSender.createMimeMessage();
-	    	
-	    	MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "utf-8");
-	    	helper.setText(contents, true);	//***HTML 적용
-	    	helper.setTo(receiverAddress);
-	    	helper.setSubject(title);
-	    	helper.setFrom(senderAddress);
-	    	mailSender.send(mimeMessage);
-*/
-   
+		    message.setSubject(title);										// 메일 제목 		    		   
+		    message.setSentDate(new Date());								// 보내는 날짜
+		    
+	    	String toHtmlTag = StringEscapeUtils.unescapeHtml4(contents);	// &lt -> <
+		    message.setContent(toHtmlTag, "text/html; charset=utf-8"); 		// 메일 내용, charset 안넣으면 ????로 내용 전달됨.
+/* 	
+	    	# 내용이 html형식인 경우 적용해서 보내기. 
+		     html태그를 String으로 변환하여 자바 서블릿으로 보내게 되면 이상한 문자로 치환된다. 
+		      (contents: &lt;p&gt;&lt;strong&gt;Hello World&lt;/strong&gt;&lt;/p&gt;)
+		  	  이때 replace를 써서 각각 html태그로 변환해줘도 되지만 아파치에서 제공하는 StringEscapeUtils 클래스를 사용하면 보다 쉽게 html태그로 치환이 가능하다. 
+		  	  (import org.apache.commons.lang3.StringEscapeUtils;)
+	    	  (toHtmlTag:<p><strong>Hello World</strong></p>)
+*/	    		    		    	
 	   } catch (Exception e){
 		    	e.printStackTrace();
 	   }
