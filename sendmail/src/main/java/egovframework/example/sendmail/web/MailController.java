@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -125,10 +126,13 @@ public class MailController {
 	public String detailPage(@ModelAttribute("mailVO") MailVO vo, ModelMap model) throws Exception {
 		MailVO mailVO = mailService.selectMail(vo);
 		model.addAttribute("title", mailVO.getTitle());
-		model.addAttribute("contents", mailVO.getContents());
 		model.addAttribute("sender", mailVO.getSender());
 		model.addAttribute("receiver", mailVO.getReceiver());
 		model.addAttribute("indate", mailVO.getIndate());
+		
+    	String toHtmlTag = StringEscapeUtils.escapeHtml4(mailVO.getContents());	// < -> &lt   (tb_mail의 내용의 <p>과아연~~~<p> -> &lt;p&gt;과아연~~~&lt;/p&gt;)
+    																			//            (요렇게 해야 메일상세화면에서 html태그가 적용되게끔 볼수 있다)
+		model.addAttribute("contents", toHtmlTag);
 		return "sendmail/mailbox/detail";        
 	}
 	
@@ -217,15 +221,40 @@ public class MailController {
 		model.addAttribute("senderAddress", senderAddr);
 		return "sendmail/write";       
 	}
+	
+	// 그룹발송 버튼 클릭시 그룹명들 불러오는 역할
+	// produces="text/html; charset=UTF-8" -> return시 한글 깨지지 않게함.
 	@ResponseBody 
-	@RequestMapping(value = "/write2.do", method = RequestMethod.POST)
-	public String write2() throws Exception {
-		System.out.println("bbb22");
-		return "sendmail/main";
+	@RequestMapping(value = "/selectGroups.do", produces="text/html; charset=UTF-8", method = RequestMethod.GET)
+	public String selectGroups() throws Exception {
+		String[] groupArr = mailService.selectGroups();		// [개발부, 인사부]
+		String optionTag = "<select id='test' onchange='selectGroup()'>"
+							+ "<option selected disabled>선택</option>"
+							+ "<option>전체</option>";
+		for(String group : groupArr) {
+			optionTag += "<option>" + group + "</option>";
+		}
+		optionTag += "</select>";
+		return optionTag;
+	}
+	
+	// 그룹 선택창에서 그룹 선택시 해당 그룹에 있는 모든 이메일들이 받는 사람에 기입되도록함.
+	@ResponseBody 
+	@RequestMapping(value = "/selectEmails.do", produces="text/html; charset=UTF-8", method = RequestMethod.POST)
+	public String selectEmails(@RequestParam("groupName") String groupName) throws Exception {
+		
+		String[] groupArr;
+		if (groupName.equals("전체")) {
+			groupArr = mailService.selectAllEmails();	
+		} else {			
+			groupArr = mailService.selectEmails(groupName);	
+		}
+		String groupStr = Arrays.toString(groupArr);
+		groupStr = groupStr.substring(1, groupStr.length()-1);		// 앞과 뒤에 있는 대괄호 삭제하고 이메일,이메일 식으로 문자열 자름
+		return groupStr;
 	}
 	
 	// 현재 ajax로 사용해서 return이 안되고 스크립트 alert도 안되는 문제가 생김. 해결중...
-	@ResponseBody	
 	@RequestMapping(value = "/write.do", method = RequestMethod.POST)
 	public String write(HttpServletRequest request, HttpServletResponse response,
 						@RequestParam("receiverAddress") String receiverAddress,
@@ -233,19 +262,21 @@ public class MailController {
 			          	@RequestParam("contents") String contents, 
 						ModelMap model) throws Exception {
 		String userId = request.getSession().getAttribute("userId").toString();
-		String senderAddress = userId + "@test.com";
+		String senderAddress = userId + "@test.com";				// @durianict.co.kr로 하면 네이버, 네이트로 service unavailable뜨면서 안되고
+																	// @test.com 으로 하면 지메일로만 안가짐. 내 자체 웹메일로는 둘다 가짐
 		String userName = request.getSession().getAttribute("userName").toString();
 		
 		MailVO mailVO = new MailVO();
 		mailVO.setTitle(title);
-		mailVO.setContents(contents);
+		
+    	String toHtmlTag = StringEscapeUtils.unescapeHtml4(contents);	// &lt -> <   (tb_mail의 내용에 &lt;p&gt;과아연~~~&lt;/p&gt; 요렇게 들어가지 않게끔)
+		mailVO.setContents(toHtmlTag);
 		mailVO.setSender(userName);
 		mailVO.setReceiver(receiverAddress);
 	    connectSMTP();
 	    createMail(senderAddress, receiverAddress, title, contents);
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
-
 	    if (sendMail()) {
 	    	mailService.insertMail(mailVO);							// 전송성공한 메일은 메일함으로 이동
 			out.println("<script>alert('메일 발송 성공!'); </script>");
@@ -296,9 +327,15 @@ public class MailController {
 
 	    try{
 
-	    	message.setFrom(new InternetAddress(senderAddress));						// 보내는 메일 주소
-		    InternetAddress[] receive_address = {new InternetAddress(receiverAddress), new InternetAddress("go_go_ssing@naver.com")};	// 받는 사람 메일주소
-		    message.setRecipients(RecipientType.TO, receive_address);		   
+	    	String[] receiverAddrs = receiverAddress.split(",");	    	
+	    	InternetAddress[] receive_address = new InternetAddress[receiverAddrs.length];
+	    	
+	    	for (int i=0; i<receiverAddrs.length; i++) {						// 다중유저의 메일을 주소배열에 넣음
+	    		receive_address[i] = new InternetAddress(receiverAddrs[i]);
+	    	}
+		    // receive_address = {new InternetAddress(receiverAddress)};		// 받는 사람 메일주소(1명)
+		    message.setRecipients(RecipientType.TO, receive_address);		// 받는 메일 주소들   
+		    message.setFrom(new InternetAddress(senderAddress));			// 보내는 메일 주소
 		    message.setSubject(title);										// 메일 제목 		    		   
 		    message.setSentDate(new Date());								// 보내는 날짜
 		    

@@ -96,6 +96,12 @@ public interface MailService {
 
 	String selectLoginCheck(MailVO vo);
 
+	String[] selectGroups();
+
+	String[] selectEmails(String groupName);
+
+	String[] selectAllEmails();
+
 	
 	
 

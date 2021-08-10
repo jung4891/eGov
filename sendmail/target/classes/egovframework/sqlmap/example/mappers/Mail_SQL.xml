@@ -28,6 +28,36 @@
 	</resultMap> 
 <!-- resultMap은 안쓸껀데 이렇게도 던질 수 있다. -->
 
+
+	<select id="selectGroups" resultType="String">		<!-- Mapper에서 String[]로 받을시 resultType은 String으로 하면 된다. -->
+
+		SELECT DISTINCT dept
+		FROM tb_user
+		WHERE dept != "" AND dept IS NOT NULL
+		ORDER BY dept;
+
+	</select>
+	
+	<select id="selectEmails" resultType="String">		<!-- Mapper에서 String[]로 받을시 resultType은 String으로 하면 된다. -->
+
+		SELECT DISTINCT email
+		FROM tb_user
+		WHERE email != "" AND email IS NOT NULL
+		AND dept = #{groupName}
+
+	</select>
+	
+	<select id="selectAllEmails" resultType="String">		<!-- Mapper에서 String[]로 받을시 resultType은 String으로 하면 된다. -->
+
+		SELECT DISTINCT email
+		FROM tb_user
+		WHERE email != "" AND email IS NOT NULL
+ 
+	</select>
+	
+	
+	
+
 	<insert id="insertMail" parameterType="mailVO">
 
 			INSERT INTO tb_mail
@@ -164,6 +194,12 @@
 				( A.receiver=#{userName} OR A.sender=#{userName} )  
 
 	</select>
+	
+	
+	
+	
+	
+	
 	
 	<select id="selectMailListTotCnt" parameterType="mailVO" resultType="int">
 

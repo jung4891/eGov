@@ -20,15 +20,42 @@
 
  <script type="text/javaScript"  defer="defer">
  
+ 	// 그룹발송 버튼 클릭시 그룹명 선택창 뜨게함
  	function groupSelect() {
  		var spanGroup = document.getElementById("group");
- 		spanGroup.innerHTML = "<select id='test' name='test' onchange='selectGroup()'><option value='' selected disabled>선택</option><option value='전체'>전체</option><option value='개발부'>개발부</option>	</select>	";
+		$.ajax({
+            url: "selectGroups.do",
+            type: "GET",									
+            success: function(res){				
+            	spanGroup.innerHTML = res;
+            },
+            error: function(){
+                alert("애러");
+            }
+    });
  	}
  	
+ 	// 그룹명 선택창에서 그룹 선택시 해당 그룹에 있는 유저들의 emailAddress가 받는사람에 입력되게함
  	function selectGroup() {
- 		var selectedGroup = document.getElementById("test");
- 		var selectText = selectedGroup.options[selectedGroup.selectedIndex].text;
- 		document.getElementById("receiverAddress").value = selectText;
+ 		var selectTag = document.getElementById("test");
+ 		var selectedGroup = selectTag.options[selectTag.selectedIndex].text;
+		$.ajax({
+            url: "selectEmails.do",
+            type: "POST",			
+            data: {
+        	    groupName: selectedGroup  																
+        	    },
+            success: function(res){				
+            	document.getElementById("receiverAddress").value = res;
+            	// $("#receiverAddress").val() = res;
+            },
+            error: function(){
+                alert("애러");
+            }
+    });
+ 		
+ 		
+ 		
  	}
  
  	function send(){

@@ -92,6 +92,12 @@ public interface MailMapper {
 	
 	String selectLoginCheck(MailVO vo);
 
+	String[] selectGroups();
+
+	String[] selectEmails(String groupName);
+
+	String[] selectAllEmails();
+
 
 	
 

@@ -186,6 +186,21 @@ public class MailServiceImpl extends EgovAbstractServiceImpl implements MailServ
 	public String selectLoginCheck(MailVO vo) {
 		return mailDAO.selectLoginCheck(vo);
 	}
+
+	@Override
+	public String[] selectGroups() {
+		return mailDAO.selectGroups();
+	}
+
+	@Override
+	public String[] selectEmails(String groupName) {
+		return mailDAO.selectEmails(groupName);
+	}
+
+	@Override
+	public String[] selectAllEmails() {
+		return mailDAO.selectAllEmails();
+	}
 	
 	
 	
