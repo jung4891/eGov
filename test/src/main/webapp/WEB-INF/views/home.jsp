@@ -20,14 +20,14 @@
 </head>
 <body> 
 	<h1>
-		Home 
+		Homesss1233
 	</h1> <br>
 	
 	@ onclick에 링크걸기 <br><br>
 	<button onclick="location.href='http://www.google.com'">현재창에서 구글열기</button>
 	<button onclick="window.open('http://www.google.com')">새창으로 구글열기</button> <br><br><br>
 	
-	<input type="button" value="ajax" onclick="location.href='ajax'"> <!-- http://localhost:8080/test/ajax -->
+	<input type="button" value="ajax" style="font-size: x-large;"  onclick="location.href='ajax'"> <!-- http://localhost:8080/test/ajax -->
 </body>																								<!--  /ajax   ->   http://localhost:8080/ajax  -->
 </html>																						  	<!--  /       ->   http://localhost:8080  -->
 

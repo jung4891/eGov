@@ -56,8 +56,6 @@
 	</select>
 	
 	
-	
-
 	<insert id="insertMail" parameterType="mailVO">
 
 			INSERT INTO tb_mail

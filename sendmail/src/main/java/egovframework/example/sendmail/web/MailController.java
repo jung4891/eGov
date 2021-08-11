@@ -249,7 +249,7 @@ public class MailController {
 		} else {			
 			groupArr = mailService.selectEmails(groupName);	
 		}
-		String groupStr = Arrays.toString(groupArr);
+		String groupStr = Arrays.toString(groupArr);				// [go_go_ssing@naver.com, hap-happy@nate.com]
 		groupStr = groupStr.substring(1, groupStr.length()-1);		// 앞과 뒤에 있는 대괄호 삭제하고 이메일,이메일 식으로 문자열 자름
 		return groupStr;
 	}

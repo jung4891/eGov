@@ -145,10 +145,12 @@
 								</div> <br>
 			  				<div>
 									받는 사람 &nbsp
-                  <button class="btn btn-primary" id="" onclick="groupSelect();" style="margin: 0px 5px; 
-                          background-color: #96a8ba; border-color: white; font-weight: bold; font-size: 12px;">
-                   	그룹발송</button>
-                   	<span id="group"></span>					
+									<c:if test="${sessionScope.userId == 'admin'}">
+										<button class="btn btn-primary" id="" onclick="groupSelect();" style="margin: 0px 5px; 
+                          background-color: #96a8ba; border-color: white; font-weight: bold; font-size: 12px;">그룹발송</button>
+                   	<span id="group"></span>		
+									</c:if>
+			
 									<input type="text" class="form-control" id="receiverAddress" name="receiverAddress" placeholder="받는 사람">
 								</div> <br>
 								<div>
