@@ -32,7 +32,10 @@
 	    name : <input type="text" name="name" id="name"><br>
 	    age : <input type="text" name="age" id="age">
 	 </form>
+	 
 	 <div id="result2"></div>
+	 
+	 
 	 
 	 
 </body>
@@ -83,3 +86,8 @@
 	});
 	
 </script>
+
+<style>
+
+
+</style>
