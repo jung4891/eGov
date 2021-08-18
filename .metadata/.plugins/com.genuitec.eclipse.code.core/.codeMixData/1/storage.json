@@ -1,0 +1,14 @@
+{
+    "telemetry.machineId": "13b6199dd6b6778e2e614b1708320f6ce5eca7126e88887adf49a93b521dbb6a",
+    "openedPathsList": {
+        "workspaces3": [
+            {
+                "id": "7155b96687ff88ffef49112bf12aca80",
+                "configURIPath": "file:///c%3A/Workspace/eGov/.metadata/codemix.code-workspace"
+            }
+        ],
+        "files2": []
+    },
+    "theme": "vs-dark",
+    "themeBackground": "#221a0f"
+}

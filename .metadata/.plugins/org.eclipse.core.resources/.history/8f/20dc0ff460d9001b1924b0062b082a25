@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egovframework.example.board.service.impl.BoardMapper">
+<!-- namespace는 Mapper의 풀경로를 의미한다. -->
+
+	<resultMap id="board" type="egovframework.example.board.service.BoardVO">
+		<result property="idx" column="idx"/>
+		<result property="title" column="title"/>
+		<result property="contents" column="contents"/>
+		<result property="writer" column="writer"/>
+		<result property="writerNm" column="writerNm"/>
+		<result property="indate" column="indate"/>
+	</resultMap>
+<!-- resultMap은 안쓸껀데 이렇게도 던질 수 있다. -->
+
+	<insert id="insertBoard" parameterType="BoardVO">
+
+			INSERT INTO TB_BOARD
+				( IDX
+				  , TITLE
+				  , CONTENTS
+				  , count
+				  , writer 
+				  , indate )
+			VALUES ( #{idx, jdbcType=VARCHAR}
+				  , #{title, jdbcType=VARCHAR}
+				  , #{contents, jdbcType=VARCHAR}
+				  , #{count, jdbcType=VARCHAR}
+				  , #{writer, jdbcType=VARCHAR}
+				  , SYSDATE() )
+
+<!-- 값이 없을때 널값을 넣어도 오류가 안나는 mybatis 규칙 : 
+		 value1 = #{value1, jdbcType=VARCHAR} VO에 int값 설정시 INT로 설정-->
+		 
+	</insert>
+
+	<update id="updateBoard">
+
+			UPDATE tb_board
+			SET title=#{title, jdbcType=VARCHAR}
+				, contents=#{contents, jdbcType=VARCHAR}
+				  WHERE idx=#{idx}
+
+	</update>
+
+	<delete id="deleteBoard">
+
+			DELETE FROM tb_board
+			WHERE idx=#{idx}
+
+	</delete>
+
+	<select id="selectBoard" resultMap="board">
+
+			SELECT
+				A.idx
+				, A.title
+				, A.contents
+				, A.count
+				, A.writer
+				, A.indate
+			FROM tb_board A
+			WHERE A.idx=#{idx}
+
+	</select>
+	<!-- select는 나중에 테이블이 추가될 수 있기에 Alias를 쓰면 좋다. -->
+	<!-- resultMap이나 resultType이나 아무거나 쓰면 된다. -->
+
+	<select id="selectBoardList" parameterType="searchVO" resultType="egovMap">
+
+			SELECT
+				ID, NAME, DESCRIPTION, USE_YN, REG_USER
+			FROM SAMPLE
+			WHERE 1=1
+			<if test="searchKeyword != null and searchKeyword != ''">
+		        <choose>
+		            <when test="searchCondition == 0">
+						AND	ID LIKE '%' || #{searchKeyword} || '%'
+					</when>
+		            <when test="searchCondition == 1">
+						AND	NAME LIKE '%' || #{searchKeyword} || '%'
+					</when>
+				</choose>
+			</if>
+			ORDER BY ID ASC
+			LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+
+	<select id="selectBoardListTotCnt" parameterType="searchVO" resultType="int">
+
+			SELECT COUNT(*) totcnt
+			FROM SAMPLE
+			WHERE 1=1
+			<if test="searchKeyword != null and searchKeyword != ''">
+		        <choose>
+		            <when test="searchCondition == 0">
+						AND ID LIKE '%' || #{searchKeyword} || '%'
+					</when>
+		            <when test="searchCondition == 1">
+						AND	NAME LIKE '%' || #{searchKeyword} || '%'
+					</when>
+				</choose>
+			</if>
+	</select>
+
+</mapper>

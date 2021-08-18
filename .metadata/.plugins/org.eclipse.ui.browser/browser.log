@@ -1,0 +1,26 @@
+
+7월 24, 2021 01:51:04.91 NEW SESSION
+7월 24, 2021 01:51:04.91 [12788:15116:0724/015104.914:ERROR:device_event_log_impl.cc(214)] [01:51:04.915] USB: usb_device_handle_win.cc:1048 Failed to read descriptor from node connection: �ý��ۿ� ������ ��ġ�� �۵����� �ʽ��ϴ�. (0x1F)
+7월 24, 2021 01:51:04.94 [12788:15116:0724/015104.939:ERROR:device_event_log_impl.cc(214)] [01:51:04.939] Bluetooth: bluetooth_adapter_winrt.cc:1073 Getting Default Adapter failed.
+7월 24, 2021 01:53:06.96 [14224:2580:0724/015306.962:ERROR:device_event_log_impl.cc(214)] [01:53:06.963] USB: usb_device_handle_win.cc:1048 Failed to read descriptor from node connection: �ý��ۿ� ������ ��ġ�� �۵����� �ʽ��ϴ�. (0x1F)
+7월 24, 2021 01:53:06.96 [14224:2580:0724/015306.969:ERROR:device_event_log_impl.cc(214)] [01:53:06.969] Bluetooth: bluetooth_adapter_winrt.cc:1073 Getting Default Adapter failed.
+7월 25, 2021 22:41:58.69 [14224:6456:0725/224158.698:ERROR:connection_factory_impl.cc(429)] Failed to connect to MCS endpoint with error -105
+7월 25, 2021 22:41:58.69 [14224:15060:0725/224158.699:ERROR:get_updates_processor.cc(257)] PostClientToServerMessage() failed during GetUpdates with error 2
+7월 25, 2021 22:41:59.42 [14224:6456:0725/224159.424:ERROR:connection_factory_impl.cc(429)] Failed to connect to MCS endpoint with error -105
+7월 25, 2021 22:42:01.16 [14224:2580:0725/224201.163:ERROR:device_event_log_impl.cc(214)] [22:42:01.158] USB: usb_service_win.cc:258 Failed to get device driver name: ��Ұ� �����ϴ�. (0x490)
+7월 26, 2021 10:14:51.64 [14224:6456:0726/101451.646:ERROR:connection_factory_impl.cc(429)] Failed to connect to MCS endpoint with error -105
+7월 26, 2021 10:14:51.65 [14224:16216:0726/101451.651:ERROR:get_updates_processor.cc(257)] PostClientToServerMessage() failed during GetUpdates with error 2
+7월 26, 2021 10:14:51.75 [14224:6456:0726/101451.749:ERROR:connection_factory_impl.cc(429)] Failed to connect to MCS endpoint with error -105
+7월 26, 2021 10:14:51.80 [14224:2340:0726/101451.807:ERROR:get_updates_processor.cc(257)] PostClientToServerMessage() failed during GetUpdates with error 2
+7월 26, 2021 12:24:58.80 [14224:3460:0726/122458.809:ERROR:database.cc(1711)] Passwords sqlite error 2067, errno 0: UNIQUE constraint failed: insecure_credentials.parent_id, insecure_credentials.insecurity_type, sql: INSERT INTO insecure_credentials (parent_id, insecurity_type, create_time, is_muted) SELECT id, ?, ?, ? FROM logins WHERE signon_realm=? AND username_value=?
+7월 26, 2021 12:39:57.40 [14224:6456:0726/123957.408:ERROR:connection_factory_impl.cc(429)] Failed to connect to MCS endpoint with error -105
+7월 26, 2021 12:39:58.24 [14224:6456:0726/123958.248:ERROR:connection_factory_impl.cc(429)] Failed to connect to MCS endpoint with error -105
+
+7월 28, 2021 12:40:37.21 NEW SESSION
+7월 28, 2021 12:40:37.21 [16484:14652:0728/124037.207:ERROR:device_event_log_impl.cc(214)] [12:40:37.206] USB: usb_device_handle_win.cc:1048 Failed to read descriptor from node connection: �ý��ۿ� ������ ��ġ�� �۵����� �ʽ��ϴ�. (0x1F)
+7월 28, 2021 12:40:37.23 [16484:14652:0728/124037.229:ERROR:device_event_log_impl.cc(214)] [12:40:37.229] Bluetooth: bluetooth_adapter_winrt.cc:1073 Getting Default Adapter failed.
+7월 28, 2021 13:58:11.57 [16484:14652:0728/135811.578:ERROR:device_event_log_impl.cc(214)] [13:58:11.578] USB: usb_service_win.cc:258 Failed to get device driver name: ��Ұ� �����ϴ�. (0x490)
+7월 28, 2021 19:19:07.99 [16484:11208:0728/191907.989:ERROR:connection_factory_impl.cc(429)] Failed to connect to MCS endpoint with error -105
+7월 28, 2021 19:19:08.49 [16484:11208:0728/191908.499:ERROR:connection_factory_impl.cc(429)] Failed to connect to MCS endpoint with error -105
+7월 28, 2021 19:19:13.84 [16484:11208:0728/191913.844:ERROR:connection_factory_impl.cc(429)] Failed to connect to MCS endpoint with error -105
+7월 29, 2021 24:39:06.66 [16484:14652:0729/003906.665:ERROR:device_event_log_impl.cc(214)] [00:39:06.665] USB: usb_service_win.cc:258 Failed to get device driver name: ��Ұ� �����ϴ�. (0x490)
